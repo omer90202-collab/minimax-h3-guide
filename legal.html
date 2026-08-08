@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<!--
+  ===================================================================
+  עמוד משפטי + נגישות + קרדיטים — דו-לשוני EN/HE
+  נטען עצמאית מ-index.html, אותה מערכת עיצוב ואותו מתג שפה.
+  ===================================================================
+-->
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Legal, Privacy &amp; Credits — MiniMax H3 Field Guide</title>
+<meta name="description" content="Privacy policy, terms of use, accessibility statement and full source attribution for the unofficial MiniMax H3 field guide.">
+<meta name="robots" content="index,follow">
+
+<meta http-equiv="Content-Security-Policy" content="
+  default-src 'self';
+  script-src 'self' 'unsafe-inline';
+  style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+  font-src 'self' https://fonts.gstatic.com;
+  img-src 'self' data:;
+  media-src 'self';
+  connect-src 'self';
+  object-src 'none';
+  base-uri 'self';
+  form-action 'none';
+  frame-ancestors 'none';
+  upgrade-insecure-requests">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#08080a;--bg-2:#0e0e12;--cream:#f2efe9;--muted:#9a9aa4;
+  --line:rgba(242,239,233,.13);--accent:#ff4326;
+  --pad:clamp(20px,5vw,80px);
+}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{
+  background:var(--bg);color:var(--cream);
+  font-family:'Heebo',system-ui,-apple-system,sans-serif;
+  line-height:1.72;-webkit-font-smoothing:antialiased;
+}
+a{color:var(--accent);text-decoration:underline;text-underline-offset:3px}
+a:hover{color:var(--cream)}
+::selection{background:var(--accent);color:#fff}
+.mono{font-family:'JetBrains Mono',ui-monospace,monospace}
+
+.skip{position:absolute;inset-inline-start:-9999px;top:0;z-index:99;background:var(--accent);color:#fff;padding:12px 20px;font-weight:700}
+.skip:focus{inset-inline-start:0}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+
+header{
+  position:sticky;top:0;z-index:20;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  padding:14px var(--pad);background:rgba(8,8,10,.94);
+  backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px);
+  border-bottom:1px solid var(--line);
+}
+.brand{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:13px;letter-spacing:.18em}
+.brand a{color:inherit;text-decoration:none}
+.brand i{color:var(--accent);font-style:normal}
+.hright{display:flex;align-items:center;gap:16px}
+.back{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;color:var(--muted)}
+.back:hover{color:var(--cream)}
+.lang{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.lang button{
+  font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;
+  padding:7px 15px;background:none;border:0;color:var(--muted);cursor:pointer;line-height:1;
+}
+.lang button[aria-pressed=true]{background:var(--accent);color:#fff}
+
+.wrap{max-width:860px;margin-inline:auto;padding:clamp(46px,8vw,90px) var(--pad) 90px}
+h1{font-size:clamp(34px,6vw,64px);font-weight:900;line-height:1.02;letter-spacing:-.025em;margin-bottom:14px}
+.sub{color:var(--muted);font-size:clamp(15px,1.6vw,18px);margin-bottom:14px}
+.updated{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:44px;display:block}
+
+.toc{border:1px solid var(--line);background:var(--bg-2);padding:22px 26px;margin-bottom:56px;border-radius:2px}
+.toc h2{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:14px;font-weight:500}
+.toc ol{list-style:none;display:grid;gap:8px}
+.toc a{text-decoration:none;color:var(--cream);font-size:15px}
+.toc a:hover{color:var(--accent)}
+.toc span{color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:12px;margin-inline-end:10px}
+
+section{margin-bottom:54px;scroll-margin-top:80px}
+h2.s{font-size:clamp(22px,3vw,30px);font-weight:800;letter-spacing:-.015em;margin-bottom:8px;padding-top:22px;border-top:1px solid var(--line)}
+h3{font-size:17px;font-weight:700;margin:26px 0 8px}
+p{color:var(--muted);margin-bottom:14px;font-size:15.5px}
+strong{color:var(--cream);font-weight:600}
+ul{margin:0 0 16px;padding-inline-start:22px;color:var(--muted);font-size:15.5px}
+li{margin-bottom:9px}
+.box{border:1px solid var(--line);border-inline-start:2px solid var(--accent);background:var(--bg-2);padding:20px 24px;margin:20px 0;border-radius:2px}
+.box p:last-child{margin-bottom:0}
+table{width:100%;border-collapse:collapse;font-size:14.5px;margin:18px 0}
+th,td{padding:12px 14px;text-align:start;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);font-weight:500}
+td{color:var(--muted)}
+td:first-child{color:var(--cream)}
+.tw{overflow-x:auto;border:1px solid var(--line);background:var(--bg-2);border-radius:2px}
+.tw table{margin:0}
+.tw tr:last-child td{border-bottom:0}
+footer{border-top:1px solid var(--line);padding:28px var(--pad);text-align:center;color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase}
+@media(prefers-contrast:more){:root{--muted:#c8c8d0;--line:rgba(242,239,233,.35)}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<a class="skip" href="#doc" data-en="Skip to content" data-he="דלג לתוכן">Skip to content</a>
+
+<header>
+  <div class="brand"><a href="index.html">MINIMAX <i>H3</i></a></div>
+  <div class="hright">
+    <a class="back" href="index.html" data-en="← Back to the guide" data-he="← חזרה למדריך">← Back to the guide</a>
+    <div class="lang" role="group" aria-label="Language / שפה">
+      <button id="btn-en" type="button" aria-pressed="true" lang="en" aria-label="Switch to English">EN</button>
+      <button id="btn-he" type="button" aria-pressed="false" lang="he" aria-label="החלף לעברית">עב</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap" id="doc">
+
+  <h1 data-en="Legal, privacy &amp; credits" data-he="משפטי, פרטיות וקרדיטים">Legal, privacy &amp; credits</h1>
+  <p class="sub" data-en="Everything about who made this, what it collects, where the material came from, and how to get something removed." data-he="כל מה שקשור למי יצר את זה, מה נאסף, מאיפה הגיע החומר, ואיך לבקש הסרה.">Everything about who made this, what it collects, where the material came from, and how to get something removed.</p>
+  <span class="updated" data-en="Last updated: 8 August 2026" data-he="עודכן לאחרונה: 8 באוגוסט 2026">Last updated: 8 August 2026</span>
+
+  <nav class="toc" aria-label="Contents">
+    <h2 data-en="Contents" data-he="תוכן העניינים">Contents</h2>
+    <ol>
+      <li><span class="mono">01</span><a href="#about" data-en="What this site is" data-he="מה האתר הזה">What this site is</a></li>
+      <li><span class="mono">02</span><a href="#privacy" data-en="Privacy policy" data-he="מדיניות פרטיות">Privacy policy</a></li>
+      <li><span class="mono">03</span><a href="#terms" data-en="Terms of use &amp; disclaimer" data-he="תנאי שימוש והבהרה">Terms of use &amp; disclaimer</a></li>
+      <li><span class="mono">04</span><a href="#credits" data-en="Sources &amp; attribution" data-he="מקורות וייחוס">Sources &amp; attribution</a></li>
+      <li><span class="mono">05</span><a href="#takedown" data-en="Copyright &amp; takedown" data-he="זכויות יוצרים והסרה">Copyright &amp; takedown</a></li>
+      <li><span class="mono">06</span><a href="#a11y" data-en="Accessibility statement" data-he="הצהרת נגישות">Accessibility statement</a></li>
+    </ol>
+  </nav>
+
+  <!-- ============ 01 ============ -->
+  <section id="about">
+    <h2 class="s" data-en="01 · What this site is" data-he="01 · מה האתר הזה">01 · What this site is</h2>
+    <div class="box">
+      <p><strong data-en="This is an independent, unofficial guide." data-he="זהו מדריך עצמאי ולא רשמי.">This is an independent, unofficial guide.</strong>
+      <span data-en="It is not published, endorsed, reviewed or sponsored by MiniMax, Hailuo AI, or any company mentioned on it. All product names, logos and trademarks belong to their respective owners and are used here for identification and commentary only." data-he="הוא אינו מפורסם, מאושר, נבדק או ממומן על ידי MiniMax, Hailuo AI, או כל חברה אחרת המוזכרת בו. כל שמות המוצרים, הלוגואים והסימנים המסחריים שייכים לבעליהם ומופיעים כאן לצורכי זיהוי וביקורת בלבד.">It is not published, endorsed, reviewed or sponsored by MiniMax, Hailuo AI, or any company mentioned on it.</span></p>
+    </div>
+    <p data-en="It is a free educational reference about the MiniMax H3 video model, compiled in August 2026 from publicly available sources plus hands-on testing. Nothing is sold here, there is no account to create, and there is nothing to sign up for." data-he="זהו מקור מידע חינמי ולימודי על מודל הווידאו MiniMax H3, שנערך באוגוסט 2026 ממקורות פומביים בתוספת בדיקות מעשיות. לא נמכר כאן דבר, אין חשבון ליצור ואין להירשם לשום דבר.">It is a free educational reference about the MiniMax H3 video model, compiled in August 2026 from publicly available sources plus hands-on testing.</p>
+    <p data-en="AI models change fast. Prices, benchmark rankings, licence terms and moderation behaviour described here were accurate when written and may already be out of date. Always confirm against MiniMax's own documentation before making a commercial decision." data-he="מודלים של בינה מלאכותית משתנים במהירות. המחירים, הדירוגים, תנאי הרישיון והתנהגות הסינון המתוארים כאן היו מדויקים בזמן הכתיבה וייתכן שכבר אינם עדכניים. תמיד ודאו מול התיעוד הרשמי של MiniMax לפני החלטה מסחרית.">AI models change fast. Always confirm against MiniMax's own documentation before making a commercial decision.</p>
+  </section>
+
+  <!-- ============ 02 ============ -->
+  <section id="privacy">
+    <h2 class="s" data-en="02 · Privacy policy" data-he="02 · מדיניות פרטיות">02 · Privacy policy</h2>
+    <div class="box">
+      <p><strong data-en="This site collects nothing about you." data-he="האתר הזה לא אוסף עליך שום דבר.">This site collects nothing about you.</strong>
+      <span data-en="No analytics, no cookies, no tracking pixels, no advertising network, no contact form, no accounts, no server-side logging of any kind by us. There is no database, because there is no back end — every page is a static file." data-he="אין אנליטיקס, אין עוגיות, אין פיקסלים למעקב, אין רשת פרסום, אין טופס יצירת קשר, אין חשבונות ואין תיעוד בצד שרת מצידנו. אין בסיס נתונים, כי אין צד שרת — כל עמוד הוא קובץ סטטי.">No analytics, no cookies, no tracking pixels, no advertising network, no contact form, no accounts.</span></p>
+    </div>
+
+    <h3 data-en="The one thing stored on your device" data-he="הדבר היחיד שנשמר במכשיר שלך">The one thing stored on your device</h3>
+    <p data-en="When you pick a language, that choice is saved in your browser's localStorage under the key h3lang, so the site opens in the same language next time. It never leaves your device and we cannot read it. Clearing your browser data removes it." data-he="כשאתם בוחרים שפה, הבחירה נשמרת ב-localStorage של הדפדפן תחת המפתח h3lang, כדי שהאתר ייפתח באותה שפה בפעם הבאה. היא לעולם לא עוזבת את המכשיר שלכם ואיננו יכולים לקרוא אותה. ניקוי נתוני הדפדפן מוחק אותה.">When you pick a language, that choice is saved in your browser's localStorage under the key h3lang. It never leaves your device.</p>
+
+    <h3 data-en="Third parties that see your request" data-he="צדדים שלישיים שרואים את הבקשה שלך">Third parties that see your request</h3>
+    <p data-en="Loading any web page reveals your IP address and browser details to whoever serves the files. For this site that means:" data-he="טעינה של כל עמוד אינטרנט חושפת את כתובת ה-IP ופרטי הדפדפן שלכם למי שמגיש את הקבצים. באתר הזה מדובר ב:">Loading any web page reveals your IP address and browser details to whoever serves the files:</p>
+    <div class="tw"><table>
+      <thead><tr>
+        <th data-en="Who" data-he="מי">Who</th>
+        <th data-en="Why" data-he="למה">Why</th>
+        <th data-en="Their policy" data-he="המדיניות שלהם">Their policy</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td>GitHub Pages</td>
+          <td data-en="Hosts this site and serves every file" data-he="מארח את האתר ומגיש כל קובץ">Hosts this site and serves every file</td>
+          <td><a href="https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener noreferrer">GitHub Privacy</a></td>
+        </tr>
+        <tr>
+          <td>Google Fonts</td>
+          <td data-en="Serves the Heebo and JetBrains Mono typefaces" data-he="מגיש את הגופנים Heebo ו-JetBrains Mono">Serves the Heebo and JetBrains Mono typefaces</td>
+          <td><a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google Privacy</a></td>
+        </tr>
+        <tr>
+          <td>jsDelivr / unpkg</td>
+          <td data-en="Serve the GSAP and Lenis animation libraries" data-he="מגישים את ספריות האנימציה GSAP ו-Lenis">Serve the GSAP and Lenis animation libraries</td>
+          <td><a href="https://www.jsdelivr.com/terms/privacy-policy-jsdelivr-net" target="_blank" rel="noopener noreferrer">jsDelivr Privacy</a></td>
+        </tr>
+      </tbody>
+    </table></div>
+    <p data-en="We have no agreement with these providers and receive no data back from them. The demo videos, images and audio are served from this site itself, so playing them tells no one else anything." data-he="אין לנו הסכם עם הספקים האלה ואיננו מקבלים מהם נתונים בחזרה. סרטוני ההדגמה, התמונות והאודיו מוגשים מהאתר עצמו, ולכן הפעלתם אינה מדווחת לאף גורם אחר.">The demo videos, images and audio are served from this site itself.</p>
+
+    <h3 data-en="Children" data-he="קטינים">Children</h3>
+    <p data-en="This site is aimed at professionals and is not directed at children under 13. Since nothing is collected from anyone, nothing is collected from children either." data-he="האתר מיועד לאנשי מקצוע ואינו מכוון לילדים מתחת לגיל 13. מכיוון שלא נאסף מידע מאף אחד, לא נאסף מידע גם מילדים.">This site is not directed at children under 13. Since nothing is collected from anyone, nothing is collected from children either.</p>
+
+    <h3 data-en="Your rights" data-he="הזכויות שלך">Your rights</h3>
+    <p data-en="Regulations such as the GDPR and Israel's Privacy Protection Law give you rights to access, correct and erase personal data held about you. We hold none, so there is nothing to access, correct or erase. If you believe otherwise, use the contact route in section 05." data-he="תקנות כמו ה-GDPR וחוק הגנת הפרטיות בישראל מקנים לכם זכויות לעיין במידע אישי שנשמר עליכם, לתקנו ולמחקו. איננו מחזיקים מידע כזה, ולכן אין מה לעיין, לתקן או למחוק. אם אתם סבורים אחרת, פנו בדרך המתוארת בסעיף 05.">We hold no personal data, so there is nothing to access, correct or erase.</p>
+  </section>
+
+  <!-- ============ 03 ============ -->
+  <section id="terms">
+    <h2 class="s" data-en="03 · Terms of use &amp; disclaimer" data-he="03 · תנאי שימוש והבהרה">03 · Terms of use &amp; disclaimer</h2>
+
+    <h3 data-en="Information only — not advice" data-he="מידע בלבד — לא ייעוץ">Information only — not advice</h3>
+    <p data-en="Everything here is provided for general information and education, as-is and without warranty of any kind. It is not legal, financial, business or technical advice. Figures like per-second pricing and benchmark scores were correct at the time of writing and change frequently. Verify anything you intend to rely on." data-he="כל מה שכאן ניתן לצורכי מידע כללי ולימוד, כמות שהוא וללא אחריות מכל סוג. אין זה ייעוץ משפטי, פיננסי, עסקי או טכני. נתונים כמו מחיר לשנייה וציוני בנצ'מרק היו נכונים בזמן הכתיבה ומשתנים תדיר. ודאו כל דבר שאתם מתכוונים להסתמך עליו.">Provided as-is, for information and education. Not legal, financial, business or technical advice.</p>
+
+    <h3 data-en="No liability" data-he="היעדר אחריות">No liability</h3>
+    <p data-en="To the fullest extent permitted by law, the author accepts no liability for any loss or damage arising from use of this site or reliance on its contents — including money spent on generations that did not turn out as described, or decisions made on the basis of information that has since changed." data-he="במידה המרבית המותרת בחוק, המחבר אינו נושא באחריות לכל אובדן או נזק הנובעים משימוש באתר או מהסתמכות על תוכנו — לרבות כסף שהוצא על ג'נרציות שלא יצאו כמתואר, או החלטות שהתקבלו על בסיס מידע שהשתנה מאז.">The author accepts no liability for loss or damage arising from use of this site or reliance on its contents.</p>
+
+    <h3 data-en="Using MiniMax H3 yourself" data-he="שימוש ב-MiniMax H3 בעצמכם">Using MiniMax H3 yourself</h3>
+    <div class="box">
+      <p data-en="This guide documents what the model does, not what you are allowed to do with it. Those are different questions. A model that will generate a real person's face and voice is not a licence to publish it." data-he="המדריך הזה מתעד מה המודל עושה, לא מה מותר לכם לעשות איתו. אלו שתי שאלות שונות. מודל שמוכן לייצר פנים וקול של אדם אמיתי אינו היתר לפרסם אותם.">This guide documents what the model does, not what you are allowed to do with it. Those are different questions.</p>
+    </div>
+    <p data-en="Your own use is governed by MiniMax's Terms of Service and Acceptable Use Policy, and by the law where you live and where your audience lives. In particular, generating a recognisable real person can engage right-of-publicity and personality rights, defamation law, election and political-advertising rules, and platform policies requiring AI-generated content to be labelled. Several jurisdictions now require disclosure of synthetic media. None of that is waived by the model accepting your prompt." data-he="השימוש שלכם כפוף לתנאי השימוש ולמדיניות השימוש המקובל של MiniMax, ולחוק במקום מגוריכם ובמקום מגורי הקהל שלכם. במיוחד, יצירת אדם אמיתי ומזוהה עשויה להפעיל זכות פרסום וזכויות אישיות, דיני לשון הרע, כללי תעמולת בחירות ופרסום פוליטי, ומדיניות פלטפורמות המחייבת סימון תוכן שנוצר בבינה מלאכותית. מדינות רבות כבר מחייבות גילוי של מדיה סינתטית. שום דבר מזה לא מתבטל בכך שהמודל קיבל את הפרומפט שלכם.">Your use is governed by MiniMax's terms and by the law where you and your audience live — including right-of-publicity, defamation, election rules and synthetic-media disclosure requirements.</p>
+
+    <h3 data-en="This site's own text and code" data-he="הטקסט והקוד של האתר הזה">This site's own text and code</h3>
+    <p data-en="The original writing, design and code of this guide are released under the MIT licence — reuse them freely with attribution. This does NOT extend to the third-party material listed in section 04, which remains owned by its respective rights holders." data-he="הכתיבה, העיצוב והקוד המקוריים של המדריך משוחררים ברישיון MIT — אפשר לעשות בהם שימוש חופשי עם ייחוס. הדבר אינו חל על החומר של צד שלישי המפורט בסעיף 04, שנשאר בבעלות בעלי הזכויות שלו.">The original writing, design and code are MIT-licensed. This does not extend to the third-party material in section 04.</p>
+  </section>
+
+  <!-- ============ 04 ============ -->
+  <section id="credits">
+    <h2 class="s" data-en="04 · Sources &amp; attribution" data-he="04 · מקורות וייחוס">04 · Sources &amp; attribution</h2>
+    <p data-en="This guide is a synthesis of published material. Every substantive claim traces to a source below, and every piece of media on the site is credited here." data-he="המדריך הוא סינתזה של חומר שפורסם. כל טענה מהותית ניתנת לייחוס למקור שלהלן, וכל פריט מדיה באתר מקבל כאן קרדיט.">Every substantive claim traces to a source below, and every piece of media on the site is credited here.</p>
+
+    <h3 data-en="Video, image and audio material" data-he="חומרי וידאו, תמונה ואודיו">Video, image and audio material</h3>
+    <div class="box">
+      <p data-en="All eight demo clips, the reference image and the reference audio track are © MiniMax. They were published by MiniMax on its official announcement page and are reproduced here for illustration, commentary and review of the product they demonstrate. They have been re-encoded to a smaller resolution and bitrate for web delivery; the originals are 2K. No claim of ownership is made and no affiliation is implied." data-he="כל שמונת קטעי ההדגמה, תמונת הרפרנס וקטע האודיו הם © MiniMax. הם פורסמו על ידי MiniMax בעמוד ההכרזה הרשמי שלה, ומובאים כאן לצורכי המחשה, פרשנות וביקורת על המוצר שהם מדגימים. הם קודדו מחדש ברזולוציה ובקצב סיביות נמוכים יותר לצורך הגשה ברשת; המקור הוא 2K. אין טענת בעלות ואין רמיזה לשיוך כלשהו.">All eight demo clips, the reference image and the reference audio are © MiniMax, published on its official announcement page and reproduced here for illustration, commentary and review. Re-encoded for web delivery; originals are 2K.</p>
+    </div>
+    <p data-en="Original source:" data-he="מקור מקורי:">Original source:</p>
+    <ul><li><a href="https://www.minimax.io/blog/minimax-h3" target="_blank" rel="noopener noreferrer">minimax.io/blog/minimax-h3</a> — <span data-en="MiniMax H3 announcement, 31 July 2026" data-he="הכרזת MiniMax H3, 31 ביולי 2026">MiniMax H3 announcement, 31 July 2026</span></li></ul>
+
+    <h3 data-en="Written sources" data-he="מקורות כתובים">Written sources</h3>
+    <div class="tw"><table>
+      <thead><tr>
+        <th data-en="Source" data-he="מקור">Source</th>
+        <th data-en="What was drawn from it" data-he="מה נלקח ממנו">What was drawn from it</th>
+      </tr></thead>
+      <tbody>
+        <tr><td><a href="https://www.minimax.io/blog/minimax-h3" target="_blank" rel="noopener noreferrer">MiniMax — announcement</a></td><td data-en="Architecture, H3-VAE, Omni Transformer, in-context regeneration, pricing claims, demo media" data-he="ארכיטקטורה, H3-VAE, Omni Transformer, רג'נרציה בקונטקסט, טענות תמחור, מדיית הדגמה">Architecture, pricing claims, demo media</td></tr>
+        <tr><td><a href="https://www.minimax.io/news/minimax-h3-open-source" target="_blank" rel="noopener noreferrer">MiniMax — open source</a></td><td data-en="Which modules were released and which stayed closed" data-he="אילו מודולים שוחררו ואילו נשארו סגורים">Which modules were released and which stayed closed</td></tr>
+        <tr><td><a href="https://huggingface.co/MiniMaxAI/MiniMax-H3" target="_blank" rel="noopener noreferrer">Hugging Face model card</a></td><td data-en="33B parameters, VAE specs, aspect ratios, 11 languages, 32 kHz stereo, licence" data-he="33 מיליארד פרמטרים, מפרטי VAE, יחסי גובה-רוחב, 11 שפות, סטריאו 32 קילו-הרץ, רישיון">Parameter count, VAE specs, aspect ratios, languages, licence</td></tr>
+        <tr><td><a href="https://fal.ai/minimax-h3" target="_blank" rel="noopener noreferrer">fal.ai</a></td><td data-en="Per-second pricing at 768p, 2K and 4K; endpoint structure; reference input limits" data-he="תמחור לשנייה ב-768p, 2K ו-4K; מבנה ה-endpoints; מגבלות קלט רפרנס">Per-second pricing; endpoint structure; input limits</td></tr>
+        <tr><td><a href="https://artificialanalysis.ai" target="_blank" rel="noopener noreferrer">Artificial Analysis</a></td><td data-en="Elo scores and rankings for video editing, text-to-video and image-to-video" data-he="ציוני Elo ודירוגים לעריכת וידאו, טקסט-לווידאו ותמונה-לווידאו">Elo scores and arena rankings</td></tr>
+        <tr><td><a href="https://the-decoder.com/chinas-minimax-h3-is-the-first-open-model-to-top-an-ai-video-ranking/" target="_blank" rel="noopener noreferrer">The Decoder</a></td><td data-en="First open-weight model to top a video arena; licence revenue threshold" data-he="המודל הפתוח הראשון שהוביל זירת וידאו; סף ההכנסות ברישיון">First open model to top a video arena; licence threshold</td></tr>
+        <tr><td><a href="https://www.atlascloud.ai/blog/guides/minimax-h3-content-restrictions" target="_blank" rel="noopener noreferrer">Atlas Cloud</a></td><td data-en="Moderation behaviour testing" data-he="בדיקת התנהגות הסינון">Moderation behaviour testing</td></tr>
+        <tr><td><a href="https://explainx.ai/blog/minimax-h3-open-video-model-hailuo-july-2026" target="_blank" rel="noopener noreferrer">explainX</a></td><td data-en="Open-weight licence scope and territory terms" data-he="היקף רישיון המשקלים הפתוחים ותנאי הטריטוריה">Open-weight licence scope and territory terms</td></tr>
+        <tr><td><a href="https://www.rundiffusion.com/minimax-h3-prompt-guide" target="_blank" rel="noopener noreferrer">RunDiffusion</a></td><td data-en="Prompt structure, structured fields, reference and voice syntax, camera vocabulary" data-he="מבנה פרומפט, שדות מובנים, תחביר רפרנס וקול, אוצר מילים של מצלמה">Prompt structure, structured fields, camera vocabulary</td></tr>
+        <tr><td><a href="https://blog.comfy.org/p/minimax-h3-day-0-support-in-comfyui" target="_blank" rel="noopener noreferrer">ComfyUI blog</a></td><td data-en="Local deployment, VRAM requirements and quantisation options" data-he="פריסה מקומית, דרישות VRAM ואפשרויות קוונטיזציה">Local deployment and VRAM requirements</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3 data-en="First-hand testing" data-he="בדיקות ממקור ראשון">First-hand testing</h3>
+    <p data-en="Two claims on this site come from direct testing rather than a published source: that H3 generates recognisable real public figures including a matching voice and accurate lip-sync, and the technical properties of the demo files — every H3 clip was verified as 24 fps with 32 kHz stereo audio by inspecting the files directly." data-he="שתי טענות באתר מגיעות מבדיקה ישירה ולא ממקור שפורסם: ש-H3 מייצר דמויות ציבוריות אמיתיות ומזוהות כולל קול תואם וליפסינק מדויק, והתכונות הטכניות של קבצי ההדגמה — כל קליפ של H3 אומת כ-24 פריימים לשנייה עם אודיו סטריאו 32 קילו-הרץ בבדיקה ישירה של הקבצים.">Two claims come from direct testing: that H3 generates recognisable real public figures with matching voice and lip-sync, and the verified technical properties of the demo files.</p>
+
+    <h3 data-en="Fonts and libraries" data-he="גופנים וספריות">Fonts and libraries</h3>
+    <ul>
+      <li><a href="https://fonts.google.com/specimen/Heebo" target="_blank" rel="noopener noreferrer">Heebo</a> &amp; <a href="https://fonts.google.com/specimen/JetBrains+Mono" target="_blank" rel="noopener noreferrer">JetBrains Mono</a> — <span data-en="SIL Open Font Licence 1.1" data-he="רישיון SIL Open Font 1.1">SIL Open Font Licence 1.1</span></li>
+      <li><a href="https://gsap.com" target="_blank" rel="noopener noreferrer">GSAP</a> + ScrollTrigger — <span data-en="standard GSAP licence, free for this use" data-he="רישיון GSAP הרגיל, חינמי לשימוש הזה">standard GSAP licence</span></li>
+      <li><a href="https://lenis.darkroom.engineering" target="_blank" rel="noopener noreferrer">Lenis</a> — <span data-en="MIT licence" data-he="רישיון MIT">MIT licence</span></li>
+    </ul>
+  </section>
+
+  <!-- ============ 05 ============ -->
+  <section id="takedown">
+    <h2 class="s" data-en="05 · Copyright &amp; takedown" data-he="05 · זכויות יוצרים והסרה">05 · Copyright &amp; takedown</h2>
+    <p data-en="Third-party material appears here under what we believe to be fair use / fair dealing for commentary, criticism, education and news reporting about the product being discussed. Every item is credited to its owner in section 04, and no attempt is made to pass any of it off as our own or to substitute for the original." data-he="חומר של צד שלישי מופיע כאן במסגרת מה שאנו סבורים שהוא שימוש הוגן לצורכי פרשנות, ביקורת, חינוך ודיווח על המוצר הנדון. כל פריט מיוחס לבעליו בסעיף 04, ואין ניסיון להציגו כשלנו או להוות תחליף למקור.">Third-party material appears under what we believe to be fair use for commentary, criticism, education and reporting. Every item is credited in section 04.</p>
+    <div class="box">
+      <p><strong data-en="If you own material used here and want it removed, it will be taken down promptly — no argument required." data-he="אם אתם בעלי חומר שנעשה בו שימוש כאן ואתם רוצים שיוסר, הוא יוסר במהירות — בלי ויכוח.">If you own material used here and want it removed, it will be taken down promptly — no argument required.</strong></p>
+      <p data-en="Open an issue on the project's GitHub repository, or contact the site owner directly. Please identify the specific file or passage and your basis for the request." data-he="פתחו issue במאגר ה-GitHub של הפרויקט, או פנו ישירות לבעל האתר. אנא ציינו את הקובץ או הקטע הספציפי ואת הבסיס לבקשה.">Open an issue on the project's GitHub repository, or contact the site owner directly. Please identify the specific file or passage.</p>
+    </div>
+    <p data-en="Corrections are equally welcome. If something here is factually wrong, say so and it will be fixed and dated." data-he="גם תיקונים יתקבלו בברכה. אם משהו כאן שגוי עובדתית, אמרו זאת והוא יתוקן ויתוארך.">Corrections are equally welcome and will be fixed and dated.</p>
+  </section>
+
+  <!-- ============ 06 ============ -->
+  <section id="a11y">
+    <h2 class="s" data-en="06 · Accessibility statement" data-he="06 · הצהרת נגישות">06 · Accessibility statement</h2>
+    <p data-en="This site aims to meet WCAG 2.1 Level AA, and in Israel to follow standard IS 5568. Accessibility was built in rather than added afterwards." data-he="האתר שואף לעמוד ב-WCAG 2.1 ברמה AA, ובישראל לפעול לפי תקן ישראלי 5568. הנגישות נבנתה לתוך האתר ולא נוספה בדיעבד.">This site aims to meet WCAG 2.1 Level AA, and in Israel to follow standard IS 5568.</p>
+
+    <h3 data-en="What is in place" data-he="מה קיים">What is in place</h3>
+    <ul>
+      <li data-en="Full keyboard navigation, with a visible focus outline on every interactive element and a skip-to-content link as the first stop." data-he="ניווט מלא במקלדת, עם מסגרת מיקוד נראית בכל אלמנט אינטראקטיבי וקישור דילוג לתוכן כתחנה הראשונה.">Full keyboard navigation, visible focus outlines, and a skip-to-content link.</li>
+      <li data-en="Text contrast meets or exceeds the 4.5:1 AA ratio throughout, and a higher-contrast palette loads automatically if your system requests one." data-he="ניגודיות הטקסט עומדת ביחס 4.5:1 הנדרש ברמה AA או עולה עליו, ופלטה בניגודיות גבוהה נטענת אוטומטית אם המערכת שלכם מבקשת זאת.">Text contrast meets or exceeds 4.5:1, with an automatic higher-contrast palette.</li>
+      <li data-en="All scroll animations stop entirely if your system is set to reduce motion, and no content depends on animation to be readable." data-he="כל אנימציות הגלילה נעצרות לחלוטין אם המערכת שלכם מוגדרת להפחתת תנועה, ושום תוכן אינו תלוי באנימציה כדי להיות קריא.">Animations stop entirely under reduce-motion, and no content depends on animation to be readable.</li>
+      <li data-en="Videos are muted and loop by default, never autoplay with sound, and all carry standard controls plus descriptive labels. Decorative imagery is hidden from screen readers so it is not announced as noise." data-he="הסרטונים מושתקים ומתנגנים בלולאה כברירת מחדל, לעולם לא מופעלים אוטומטית עם קול, וכולם נושאים פקדים תקניים ותוויות מתארות. תמונות דקורטיביות מוסתרות מקוראי מסך כדי שלא יוקראו כרעש.">Videos are muted by default with standard controls and descriptive labels; decorative imagery is hidden from screen readers.</li>
+      <li data-en="The page is fully responsive down to small phones with no horizontal scrolling, and text scales with your browser's zoom and font-size settings." data-he="הדף רספונסיבי לחלוטין עד לטלפונים קטנים ללא גלילה אופקית, והטקסט מותאם להגדלה ולגודל הגופן בדפדפן שלכם.">Fully responsive with no horizontal scrolling; text scales with browser zoom.</li>
+      <li data-en="Both languages are marked up correctly, with the document language and reading direction switching together so screen readers pronounce Hebrew and English properly." data-he="שתי השפות מסומנות נכון, כאשר שפת המסמך וכיוון הקריאה מתחלפים יחד כדי שקוראי מסך יהגו עברית ואנגלית כראוי.">Both languages are marked up correctly, with document language and reading direction switching together.</li>
+    </ul>
+
+    <h3 data-en="Known limitations" data-he="מגבלות ידועות">Known limitations</h3>
+    <p data-en="The demo videos are supplied by MiniMax without captions or transcripts, and we cannot caption them accurately for you. Their spoken content is described in the surrounding text wherever it matters. The scroll-driven scenes are decorative — every fact they carry also appears as plain text elsewhere on the page." data-he="סרטוני ההדגמה סופקו על ידי MiniMax ללא כתוביות או תמלול, ואיננו יכולים לתמלל אותם עבורכם במדויק. התוכן המדובר בהם מתואר בטקסט הסובב בכל מקום שבו הדבר משמעותי. סצנות הגלילה הן דקורטיביות — כל עובדה שהן נושאות מופיעה גם כטקסט רגיל במקום אחר בעמוד.">The demo videos arrive from MiniMax without captions and we cannot caption them accurately; their content is described in the surrounding text. Scroll scenes are decorative and every fact they carry also appears as plain text.</p>
+
+    <h3 data-en="Something not working for you?" data-he="משהו לא עובד עבורכם?">Something not working for you?</h3>
+    <p data-en="Accessibility problems are treated as bugs. Report one through the project's GitHub repository and it will be addressed." data-he="בעיות נגישות מטופלות כתקלות. דווחו על בעיה דרך מאגר ה-GitHub של הפרויקט והיא תטופל.">Accessibility problems are treated as bugs. Report one through the project's GitHub repository.</p>
+  </section>
+
+</main>
+
+<footer>
+  <span data-en="Unofficial field guide · not affiliated with MiniMax · demo clips © MiniMax" data-he="מדריך שדה לא רשמי · ללא שיוך ל-MiniMax · קטעי הדגמה © MiniMax">Unofficial field guide · not affiliated with MiniMax · demo clips © MiniMax</span>
+</footer>
+
+<script>
+/* מתג שפה — זהה ל-index.html: החלפת טקסט על עלים בלבד, ואז כיוון המסמך */
+const btnEn=document.getElementById('btn-en');
+const btnHe=document.getElementById('btn-he');
+function applyLang(lang){
+  const root=document.documentElement;
+  root.lang=lang;
+  root.dir=(lang==='he')?'rtl':'ltr';
+  document.querySelectorAll('[data-en]').forEach(el=>{
+    const v=el.getAttribute('data-'+lang);
+    if(v!==null&&v!==undefined) el.textContent=v;
+  });
+  btnEn.setAttribute('aria-pressed',String(lang==='en'));
+  btnHe.setAttribute('aria-pressed',String(lang==='he'));
+  document.title=(lang==='he')
+    ? 'משפטי, פרטיות וקרדיטים — המדריך ל-MiniMax H3'
+    : 'Legal, Privacy & Credits — MiniMax H3 Field Guide';
+  try{localStorage.setItem('h3lang',lang);}catch(e){}
+}
+btnEn.addEventListener('click',()=>applyLang('en'));
+btnHe.addEventListener('click',()=>applyLang('he'));
+let saved='en';
+try{saved=localStorage.getItem('h3lang')||'en';}catch(e){}
+if(saved==='he') applyLang('he');
+</script>
+</body>
+</html>

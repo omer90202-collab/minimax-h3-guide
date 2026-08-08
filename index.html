@@ -1,0 +1,1448 @@
+<!DOCTYPE html>
+<!--
+  ===================================================================
+  MINIMAX H3 — FIELD GUIDE
+  אתר מדריך דו-לשוני (EN ברירת מחדל / HE RTL) למודל הווידאו MiniMax H3
+  ===================================================================
+  קומפוננטות Animmaster ששימשו (Awwwards Pack):
+    · הירו "טלסקופ"      → Scroll Animation/10  telescope-zoom
+                            (הומר מ-ScrollSmoother ל-Lenis; mask.png → radial-gradient)
+    · קלפי יכולות תלת-ממד → Scroll Animation/18  3DStackMotion / effect-1
+    · רשת שואוקייס דביקה  → Scroll Animation/16  sticky-grid-scroll
+  ===================================================================
+  כל הנכסים מקומיים תחת assets/ — 8 סרטוני דמו רשמיים מ-minimax.io
+  ===================================================================
+-->
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MiniMax H3 — The Complete Field Guide</title>
+<meta name="description" content="Everything about MiniMax H3: native 2K video with stereo audio at $0.13/sec, 33B open weights, benchmarks, pricing, content limits and prompting.">
+
+<!-- ===== אבטחה =====
+     אתר סטטי לחלוטין: אין שרת, אין בסיס נתונים, אין טפסים ואין קלט משתמש —
+     ולכן אין משטח להזרקה. ה-CSP נועל את מקורות הטעינה לרשימה סגורה,
+     כך שגם אם דף כלשהו ישונה, אי אפשר למשוך ממנו קוד מדומיין זר. -->
+<meta http-equiv="Content-Security-Policy" content="
+  default-src 'self';
+  script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://unpkg.com;
+  style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+  font-src 'self' https://fonts.gstatic.com;
+  img-src 'self' data:;
+  media-src 'self';
+  connect-src 'self';
+  object-src 'none';
+  base-uri 'self';
+  form-action 'none';
+  frame-ancestors 'none';
+  upgrade-insecure-requests">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+
+<!-- ===== תצוגה מקדימה בשיתוף (אינסטגרם / וואטסאפ / טלגרם) ===== -->
+<meta property="og:type" content="article">
+<meta property="og:title" content="MiniMax H3 — The Complete Field Guide">
+<meta property="og:description" content="Native 2K video with stereo audio at $0.13 a second. Specs, benchmarks, pricing, content limits and prompting — with eight official demos.">
+<meta property="og:image" content="https://omer90202-collab.github.io/minimax-h3-guide/assets/poster/03-2k-performance.jpg">
+<meta property="og:image:alt" content="A frame from a MiniMax H3 generated 2K video">
+<meta property="og:url" content="https://omer90202-collab.github.io/minimax-h3-guide/">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="he_IL">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://omer90202-collab.github.io/minimax-h3-guide/">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   1. בסיס ומערכת עיצוב
+   ============================================================ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#08080a;
+  --bg-2:#0e0e12;
+  --cream:#f2efe9;
+  --muted:#8b8b95;
+  --line:rgba(242,239,233,.13);
+  --accent:#ff4326;
+  --accent-soft:rgba(255,67,38,.14);
+  --ok:#3ddc91;
+  --warn:#ffc24d;
+  --bad:#ff5470;
+  --pad:clamp(20px,5vw,80px);
+  --maxw:1360px;
+}
+html{-webkit-text-size-adjust:100%}
+html.lenis,html.lenis body{height:auto}
+.lenis.lenis-smooth{scroll-behavior:auto!important}
+body{
+  background:var(--bg);color:var(--cream);
+  font-family:'Heebo',system-ui,-apple-system,sans-serif;
+  font-weight:400;line-height:1.65;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+body.loading{overflow:hidden}
+img,video{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+::selection{background:var(--accent);color:#fff}
+
+.mono{font-family:'JetBrains Mono',ui-monospace,monospace;font-variant-ligatures:none}
+.wrap{width:100%;max-width:var(--maxw);margin-inline:auto;padding-inline:var(--pad)}
+section{position:relative}
+
+/* טיפוגרפיה */
+.kicker{
+  font-family:'JetBrains Mono',monospace;font-size:clamp(10px,1.05vw,12px);
+  letter-spacing:.34em;text-transform:uppercase;color:var(--accent);
+  display:flex;align-items:center;gap:14px;margin-bottom:26px;
+}
+.kicker::before{content:"";width:34px;height:1px;background:var(--accent);flex:none}
+html[dir=rtl] .kicker{letter-spacing:.2em}
+
+h2.sec-title{
+  font-size:clamp(38px,7vw,104px);font-weight:900;line-height:.98;
+  letter-spacing:-.025em;margin-bottom:.32em;
+}
+h3{font-size:clamp(19px,2.1vw,26px);font-weight:700;line-height:1.25;letter-spacing:-.01em}
+.lead{
+  font-size:clamp(16px,1.65vw,21px);color:var(--muted);
+  max-width:62ch;font-weight:300;line-height:1.72;
+}
+html[dir=rtl] .lead{font-weight:400}
+.outline{-webkit-text-stroke:1px var(--cream);color:transparent}
+.acc{color:var(--accent)}
+
+/* מסכת שורה — התבנית הבטוחה ל-RTL (בלי SplitText) */
+.hl{display:block;overflow:hidden}
+.hl>span{display:block;will-change:transform}
+
+/* ============================================================
+   2. פרילואדר
+   ============================================================ */
+#pre{
+  position:fixed;inset:0;z-index:999;background:var(--bg);
+  display:grid;place-items:center;
+}
+#pre .pre-in{text-align:center}
+#pre .pre-mark{
+  font-family:'JetBrains Mono',monospace;font-weight:700;
+  font-size:clamp(24px,5vw,54px);letter-spacing:-.02em;
+}
+#pre .pre-bar{
+  width:min(240px,52vw);height:1px;background:var(--line);
+  margin:22px auto 0;overflow:hidden;
+}
+#pre .pre-bar i{display:block;height:100%;width:0;background:var(--accent)}
+
+/* ============================================================
+   3. הדר + מתג שפה
+   ============================================================ */
+header{
+  position:fixed;top:0;left:0;right:0;z-index:120;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:16px;padding:16px var(--pad);
+  background:linear-gradient(to bottom,rgba(8,8,10,.92),rgba(8,8,10,0));
+  backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px);
+}
+.brand{
+  font-family:'JetBrains Mono',monospace;font-weight:700;
+  font-size:13px;letter-spacing:.18em;white-space:nowrap;
+}
+.brand i{color:var(--accent);font-style:normal}
+.hnav{display:flex;align-items:center;gap:clamp(14px,2.4vw,34px)}
+.hnav a{
+  font-family:'JetBrains Mono',monospace;font-size:11px;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--muted);
+  transition:color .3s;white-space:nowrap;
+}
+.hnav a:hover{color:var(--cream)}
+@media(max-width:900px){.hnav .hlink{display:none}}
+
+/* מתג שפה */
+.lang{
+  display:flex;align-items:center;border:1px solid var(--line);
+  border-radius:999px;overflow:hidden;flex:none;
+}
+.lang button{
+  font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;
+  letter-spacing:.1em;padding:7px 15px;background:none;border:0;
+  color:var(--muted);cursor:pointer;transition:.3s;line-height:1;
+}
+.lang button[aria-pressed=true]{background:var(--accent);color:#fff}
+.lang button:hover:not([aria-pressed=true]){color:var(--cream)}
+
+/* ============================================================
+   4. הירו — Animmaster · Scroll Animation/10 (telescope-zoom)
+   מנגנון מקורי: אריחים קטנים טסים לעבר המצלמה ב-z,
+   ומדיה מרכזית מתרחבת (--progress) עם שכבות מסכה קונצנטריות.
+   הומר מ-ScrollSmoother ל-Lenis + ScrollTrigger.
+   ============================================================ */
+.hero{
+  position:relative;height:100vh;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+  --progress:0;
+}
+/* וילון קריאות — יושב בין האריחים (z2) לכותרת (z4).
+   דוהה ככל שהטלסקופ נפתח, כדי לא לחנוק את הווידאו בסוף. */
+.hero::after{
+  content:"";position:absolute;inset:0;z-index:3;pointer-events:none;
+  opacity:calc(1 - var(--progress) * .72);
+  background:
+    radial-gradient(ellipse 62% 44% at 50% 50%,rgba(8,8,10,.86) 0%,rgba(8,8,10,.45) 55%,transparent 78%),
+    linear-gradient(to bottom,rgba(8,8,10,.78) 0%,transparent 26%,transparent 62%,rgba(8,8,10,.86) 100%);
+}
+/* המדיה המתרחבת */
+.hero__media{
+  position:absolute;inset:0;z-index:1;
+  transform:scale(var(--progress));
+  will-change:transform;
+}
+.hero__media__back,.hero__media__front{position:absolute;inset:0}
+.hero__media__back video,.hero__media__front img{
+  position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;object-position:center;
+}
+/* טבעות קונצנטריות — תחליף ל-mask.png המקורי */
+.hero__media__front{filter:blur(3px)}
+.hero__media__front img{
+  -webkit-mask-image:radial-gradient(circle at 50% 50%,#000 54%,transparent 71%);
+  mask-image:radial-gradient(circle at 50% 50%,#000 54%,transparent 71%);
+}
+.hero__media__front.f1{transform:scale(1)}
+.hero__media__front.f2{transform:scale(.85)}
+.hero__media__front.f3{transform:scale(.6)}
+.hero__media__front.f4{transform:scale(.45)}
+.hero__media__front.f5{transform:scale(.3)}
+.hero__media__front.f6{transform:scale(.15)}
+
+/* אריחים טסים */
+.hero__tiles{
+  position:absolute;inset:0;z-index:2;
+  perspective:100vh;pointer-events:none;
+}
+/* אריחים בגודל אחיד — aspect-ratio קבוע כדי שפוסטרים אנכיים
+   לא ימתחו לפסים גבוהים (באג שנתפס באימות בדפדפן) */
+.hero__tiles img{
+  position:absolute;width:10.5vw;aspect-ratio:16/10;
+  object-fit:cover;border-radius:3px;
+  box-shadow:0 18px 48px rgba(0,0,0,.65);
+  backface-visibility:hidden;filter:brightness(.82);
+}
+/* מיקומים מתוכננים סביב שלושה אזורים נקיים:
+   קיקר (12–20vh משמאל) · כותרת (35–58vh במרכז) · תת-כותרת (78–96vh משמאל) */
+.hero__tiles img:nth-of-type(1){top:26vh;left:1vw}
+.hero__tiles img:nth-of-type(2){top:2vh;left:17vw}
+.hero__tiles img:nth-of-type(3){top:3vh;left:34vw}
+.hero__tiles img:nth-of-type(4){top:5vh;right:26vw}
+.hero__tiles img:nth-of-type(5){top:14vh;right:7vw}
+.hero__tiles img:nth-of-type(6){top:33vh;right:1vw}
+.hero__tiles img:nth-of-type(7){top:63vh;left:2vw}
+.hero__tiles img:nth-of-type(8){bottom:5vh;left:52vw}
+.hero__tiles img:nth-of-type(9){bottom:9vh;right:20vw}
+.hero__tiles img:nth-of-type(10){bottom:16vh;right:4vw}
+/* במובייל האזורים הנקיים צרים בהרבה — משאירים 6 אריחים בלבד,
+   כולם מחוץ לפס הקיקר (6–15vh), לפס הכותרת (40–58vh) ולתת-הכותרת (80vh+) */
+@media(max-width:768px){
+  .hero__tiles img{width:27vw}
+  .hero__tiles img:nth-of-type(3),
+  .hero__tiles img:nth-of-type(6),
+  .hero__tiles img:nth-of-type(8),
+  .hero__tiles img:nth-of-type(10){display:none}
+  .hero__tiles img:nth-of-type(1){top:17vh;left:1vw;right:auto;bottom:auto}
+  .hero__tiles img:nth-of-type(2){top:16vh;left:auto;right:2vw;bottom:auto}
+  .hero__tiles img:nth-of-type(4){top:28.5vh;left:4vw;right:auto;bottom:auto}
+  .hero__tiles img:nth-of-type(5){top:27.5vh;left:auto;right:3vw;bottom:auto}
+  .hero__tiles img:nth-of-type(7){top:60vh;left:2vw;right:auto;bottom:auto}
+  .hero__tiles img:nth-of-type(9){top:62vh;left:auto;right:3vw;bottom:auto}
+}
+
+/* כותרת הירו — נשארת LTR תמיד (שם מותג) */
+.hero__title{
+  position:relative;z-index:4;display:flex;justify-content:center;
+  gap:.14em;
+  font-size:clamp(44px,11vw,168px);font-weight:900;letter-spacing:-.04em;
+  line-height:1;transform:translateY(-10%);pointer-events:none;
+  text-shadow:0 6px 26px rgba(8,8,10,.92),0 14px 70px rgba(8,8,10,.75);
+}
+.hero__title span{display:inline-block}
+.hero__title b{display:inline-block;font-weight:inherit;font-style:normal}
+.hero__title .left{transform:translate3d(calc(var(--progress) * -34vw),0,0)}
+.hero__title .right{transform:translate3d(calc(var(--progress) * 34vw),0,0);color:var(--accent)}
+@media(max-width:768px){
+  .hero__title .left{transform:translate3d(calc(var(--progress) * -30vw),0,0)}
+  .hero__title .right{transform:translate3d(calc(var(--progress) * 30vw),0,0)}
+}
+/* טקסטים סביב ההירו */
+.hero__meta{
+  position:absolute;z-index:5;left:var(--pad);right:var(--pad);
+  bottom:clamp(26px,5vh,54px);
+  display:flex;align-items:flex-end;justify-content:space-between;
+  gap:22px;flex-wrap:wrap;
+}
+.hero__sub{
+  max-width:44ch;font-size:clamp(14px,1.45vw,18px);color:#c9c9d2;font-weight:300;
+  text-shadow:0 2px 14px rgba(8,8,10,.95),0 0 34px rgba(8,8,10,.85);
+}
+html[dir=rtl] .hero__sub{font-weight:400}
+/* הכותרות הקטנות בהירו יושבות מעל אריחים — צריך צל כדי להישאר קריאות */
+.hero__badge .kicker,.hero__scroll{text-shadow:0 2px 12px rgba(8,8,10,.98),0 0 26px rgba(8,8,10,.9)}
+.hero__scroll{
+  font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.3em;
+  text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:10px;
+}
+.hero__scroll i{display:block;width:1px;height:34px;background:var(--line);position:relative;overflow:hidden}
+.hero__scroll i::after{content:"";position:absolute;inset:0;background:var(--accent);animation:sd 1.9s infinite}
+@keyframes sd{0%{transform:translateY(-100%)}100%{transform:translateY(100%)}}
+.hero__badge{
+  position:absolute;top:calc(var(--pad) + 42px);left:var(--pad);z-index:5;
+}
+html[dir=rtl] .hero__badge{left:auto;right:var(--pad)}
+
+/* ============================================================
+   5. רצועת מספרים
+   ============================================================ */
+.stats{border-block:1px solid var(--line);background:var(--bg-2)}
+.stats__grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+}
+.stat{padding:clamp(28px,4vw,54px) clamp(16px,2.4vw,34px);border-inline-start:1px solid var(--line)}
+.stat:first-child{border-inline-start:0}
+.stat b{
+  display:block;font-family:'JetBrains Mono',monospace;font-weight:700;
+  font-size:clamp(26px,3.5vw,48px);letter-spacing:-.03em;line-height:1;
+  margin-bottom:10px;
+}
+.stat span{font-size:12px;color:var(--muted);letter-spacing:.04em;display:block;line-height:1.45}
+@media(max-width:640px){
+  .stats__grid{grid-template-columns:1fr 1fr}
+  .stat:nth-child(odd){border-inline-start:0}
+  .stat{border-top:1px solid var(--line)}
+}
+
+/* ============================================================
+   6. סקשן כללי
+   ============================================================ */
+.sec{padding:clamp(90px,13vh,170px) 0}
+.sec-head{margin-bottom:clamp(42px,6vw,80px);max-width:78ch}
+
+/* ============================================================
+   7. הוכחת קונטקסט מולטימודאלי
+   ============================================================ */
+.proof{display:grid;grid-template-columns:1fr;gap:clamp(26px,3.4vw,46px)}
+.proof__prompt{
+  border:1px solid var(--line);border-inline-start:2px solid var(--accent);
+  background:var(--bg-2);padding:clamp(20px,2.6vw,32px);
+  font-family:'JetBrains Mono',monospace;font-size:clamp(13px,1.35vw,16px);
+  line-height:1.75;color:var(--cream);
+}
+.proof__prompt em{color:var(--accent);font-style:normal;font-weight:700}
+.proof__flow{display:grid;grid-template-columns:1fr auto 1fr;gap:clamp(16px,2.4vw,34px);align-items:center}
+@media(max-width:900px){.proof__flow{grid-template-columns:1fr;gap:20px}}
+.proof__ins{display:grid;gap:14px}
+.pin-card{
+  border:1px solid var(--line);background:var(--bg-2);overflow:hidden;
+  display:grid;grid-template-columns:104px 1fr;align-items:center;gap:16px;
+  transition:border-color .4s;
+}
+.pin-card:hover{border-color:rgba(255,67,38,.5)}
+.pin-card .pv{width:104px;height:72px;object-fit:cover;background:#000}
+.pin-card .pt{padding-inline-end:16px}
+.pin-card .pt b{
+  display:block;font-family:'JetBrains Mono',monospace;font-size:11px;
+  letter-spacing:.18em;color:var(--accent);margin-bottom:3px;text-transform:uppercase;
+}
+.pin-card .pt span{font-size:13px;color:var(--muted);line-height:1.45;display:block}
+.pin-card audio{width:100%;height:34px;padding:0 12px 10px}
+.pin-card.is-audio{grid-template-columns:1fr}
+.pin-card.is-audio .pt{padding:14px 16px 6px}
+.proof__arrow{
+  font-family:'JetBrains Mono',monospace;color:var(--accent);
+  font-size:26px;text-align:center;
+}
+@media(max-width:900px){.proof__arrow{transform:rotate(90deg)}}
+.proof__out{border:1px solid var(--line);background:#000;overflow:hidden}
+.proof__out video{width:100%;aspect-ratio:16/9;object-fit:cover}
+.proof__out .cap{
+  padding:13px 16px;font-family:'JetBrains Mono',monospace;font-size:11px;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--muted);
+  border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;
+}
+
+/* ============================================================
+   8. רשת היכולות
+   ============================================================ */
+/* רשת היכולות הקריאה */
+.caps{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,270px),1fr));gap:clamp(14px,1.9vw,24px)}
+.cap{border:1px solid var(--line);background:var(--bg-2);padding:clamp(20px,2.5vw,28px);transition:border-color .4s}
+.cap:hover{border-color:rgba(255,67,38,.45)}
+.cap b{
+  display:block;font-family:'JetBrains Mono',monospace;font-size:10px;
+  letter-spacing:.2em;color:var(--accent);margin-bottom:12px;text-transform:uppercase;
+}
+.cap h4{font-size:17px;font-weight:700;line-height:1.3;margin-bottom:8px;letter-spacing:-.01em}
+.cap p{font-size:13.5px;color:var(--muted);line-height:1.62}
+
+/* ============================================================
+   9. טבלאות
+   ============================================================ */
+.tbl{width:100%;border-collapse:collapse;font-size:clamp(13px,1.35vw,15px)}
+.tbl th,.tbl td{
+  padding:15px clamp(10px,1.5vw,20px);text-align:start;
+  border-bottom:1px solid var(--line);vertical-align:top;
+}
+.tbl th{
+  font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--accent);font-weight:500;white-space:nowrap;
+}
+.tbl td:first-child{color:var(--cream);font-weight:500}
+.tbl td{color:var(--muted)}
+.tbl tr:hover td{background:rgba(242,239,233,.028)}
+.tbl .num{font-family:'JetBrains Mono',monospace;color:var(--cream)}
+.tscroll{overflow-x:auto;border:1px solid var(--line);background:var(--bg-2)}
+.tscroll .tbl tr:last-child td{border-bottom:0}
+
+/* ============================================================
+   10. שואוקייס — Animmaster · Scroll Animation/16 (sticky-grid-scroll)
+   מנגנון מקורי: עמודות נכנסות מלמעלה/מטה לסירוגין, ואז זום 2.05
+   עם עמודות צד שנפרשות החוצה.
+   ============================================================ */
+.showcase{height:300vh;position:relative}
+.showcase__pin{
+  position:sticky;top:0;height:100vh;overflow:hidden;
+  display:grid;place-items:center;
+}
+/* וילון קריאות לכיתוב שיושב מעל הרשת המוגדלת */
+.showcase__pin::after{
+  content:"";position:absolute;inset:0;z-index:5;pointer-events:none;
+  background:radial-gradient(ellipse 72% 48% at 50% 50%,rgba(8,8,10,.88) 0%,rgba(8,8,10,.4) 60%,transparent 84%);
+}
+.showcase__grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:clamp(8px,1.1vw,16px);width:min(94vw,1180px);
+  will-change:transform;
+}
+.showcase__item{
+  aspect-ratio:16/10;overflow:hidden;background:#000;
+  border:1px solid var(--line);will-change:transform;
+}
+.showcase__item img{width:100%;height:100%;object-fit:cover;opacity:.86}
+.showcase__cap{
+  position:absolute;z-index:6;text-align:center;pointer-events:none;
+  padding-inline:var(--pad);
+}
+.showcase__cap h2{
+  font-size:clamp(34px,7.5vw,110px);font-weight:900;line-height:.96;letter-spacing:-.03em;
+  text-shadow:0 8px 50px rgba(8,8,10,.9);
+}
+.showcase__cap p{
+  color:var(--muted);margin-top:14px;font-size:clamp(14px,1.5vw,18px);
+  opacity:0;max-width:52ch;margin-inline:auto;
+}
+
+/* ============================================================
+   11. תצוגות וידאו
+   ============================================================ */
+.vgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:clamp(18px,2.4vw,34px)}
+.vcard{border:1px solid var(--line);background:var(--bg-2);overflow:hidden}
+.vcard video{width:100%;background:#000;display:block}
+.vcard.is-vert video{aspect-ratio:9/16;object-fit:cover;max-height:74vh;margin-inline:auto}
+.vcard__body{padding:clamp(16px,2vw,24px)}
+.vcard__body b{
+  display:block;font-family:'JetBrains Mono',monospace;font-size:10px;
+  letter-spacing:.2em;color:var(--accent);text-transform:uppercase;margin-bottom:9px;
+}
+.vcard__body h3{margin-bottom:7px}
+.vcard__body p{font-size:14px;color:var(--muted);line-height:1.62}
+.vcard__meta{
+  display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;
+}
+.chip{
+  font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;
+  border:1px solid var(--line);padding:4px 9px;color:var(--muted);white-space:nowrap;
+}
+.vfull{border:1px solid var(--line);background:#000;overflow:hidden;margin-bottom:clamp(18px,2.4vw,34px)}
+.vfull video{width:100%;display:block}
+.vfull__bar{
+  display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;
+  padding:14px clamp(14px,2vw,22px);border-top:1px solid var(--line);background:var(--bg-2);
+}
+.vfull__bar b{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase}
+.vfull__bar span{font-size:13px;color:var(--muted)}
+.sound-note{
+  display:inline-flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;
+  font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);
+  border:1px solid var(--accent-soft);background:var(--accent-soft);padding:5px 11px;
+}
+
+/* ============================================================
+   12. בנצ'מרקים
+   ============================================================ */
+.bench{display:grid;gap:clamp(16px,2vw,26px)}
+.brow{border:1px solid var(--line);background:var(--bg-2);padding:clamp(18px,2.3vw,28px)}
+.brow__top{display:flex;justify-content:space-between;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:16px}
+.brow__top h4{font-size:clamp(16px,1.9vw,21px);font-weight:700}
+.brow__rank{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.16em;color:var(--accent)}
+.bbar{height:2px;background:var(--line);position:relative;margin-bottom:9px}
+.bbar i{position:absolute;inset-inline-start:0;top:0;height:100%;width:0;background:var(--accent);display:block}
+.brow__meta{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted)}
+
+/* ============================================================
+   13. תמחור
+   ============================================================ */
+.price{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:clamp(14px,1.8vw,22px);margin-bottom:clamp(26px,3.4vw,44px)}
+.pcard{border:1px solid var(--line);background:var(--bg-2);padding:clamp(20px,2.6vw,32px);position:relative;overflow:hidden}
+.pcard.hot{border-color:rgba(255,67,38,.55)}
+.pcard.hot::after{
+  content:"";position:absolute;inset-inline-start:0;top:0;width:2px;height:100%;background:var(--accent);
+}
+.pcard b{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:14px}
+.pcard .pv{font-family:'JetBrains Mono',monospace;font-size:clamp(28px,3.6vw,44px);font-weight:700;letter-spacing:-.03em;line-height:1;display:block}
+.pcard .pu{font-size:12px;color:var(--muted);display:block;margin-top:7px}
+.pcard .pl{margin-top:18px;padding-top:15px;border-top:1px solid var(--line);font-size:13px;color:var(--muted);display:grid;gap:5px}
+.pcard .pl i{font-style:normal;display:flex;justify-content:space-between;gap:10px}
+.pcard .pl i span:last-child{font-family:'JetBrains Mono',monospace;color:var(--cream)}
+
+/* ============================================================
+   14. מגבלות — כרטיסי אמת
+   ============================================================ */
+.truth{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));gap:clamp(14px,1.9vw,24px)}
+.tcard{border:1px solid var(--line);background:var(--bg-2);padding:clamp(20px,2.6vw,30px)}
+.tcard header{position:static;background:none;backdrop-filter:none;padding:0;display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.tcard .dot{width:8px;height:8px;border-radius:50%;flex:none}
+.tcard.ok .dot{background:var(--ok)}
+.tcard.warn .dot{background:var(--warn)}
+.tcard.bad .dot{background:var(--bad)}
+.tcard .tag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase}
+.tcard.ok .tag{color:var(--ok)}
+.tcard.warn .tag{color:var(--warn)}
+.tcard.bad .tag{color:var(--bad)}
+.tcard h4{font-size:17px;font-weight:700;margin-bottom:9px;line-height:1.3}
+.tcard p{font-size:14px;color:var(--muted);line-height:1.65}
+.tcard code{
+  font-family:'JetBrains Mono',monospace;font-size:12px;background:rgba(242,239,233,.06);
+  padding:2px 6px;color:var(--cream);
+}
+/* הערה מעשית קטנה — לא כרטיס אזהרה */
+.softnote{
+  margin-top:clamp(22px,3vw,34px);font-size:13.5px;line-height:1.7;color:var(--muted);
+  max-width:76ch;padding-top:18px;border-top:1px solid var(--line);
+}
+
+/* ============================================================
+   15. פרומפטינג
+   ============================================================ */
+.formula{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));gap:10px;margin-bottom:clamp(28px,3.6vw,46px)}
+.fstep{border:1px solid var(--line);background:var(--bg-2);padding:16px;position:relative}
+.fstep b{font-family:'JetBrains Mono',monospace;font-size:26px;font-weight:700;color:var(--accent-soft);line-height:1;display:block;margin-bottom:9px;-webkit-text-stroke:1px var(--accent);color:transparent}
+.fstep span{font-size:13px;line-height:1.45;display:block}
+.code{
+  border:1px solid var(--line);background:#0b0b0f;overflow:hidden;
+}
+.code__bar{
+  display:flex;justify-content:space-between;align-items:center;gap:12px;
+  padding:11px 16px;border-bottom:1px solid var(--line);
+  font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--muted);
+}
+.code pre{
+  padding:clamp(16px,2.2vw,24px);overflow-x:auto;
+  font-family:'JetBrains Mono',monospace;font-size:clamp(12px,1.25vw,13.5px);
+  line-height:1.8;color:var(--cream);white-space:pre-wrap;word-break:break-word;
+  direction:ltr;text-align:left;
+}
+.code pre .k{color:var(--accent)}
+.code pre .c{color:var(--muted)}
+.copy{
+  background:none;border:1px solid var(--line);color:var(--muted);cursor:pointer;
+  font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;
+  padding:5px 11px;text-transform:uppercase;transition:.3s;
+}
+.copy:hover{color:var(--cream);border-color:var(--cream)}
+
+/* ============================================================
+   16. גישה
+   ============================================================ */
+.acc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:clamp(14px,1.9vw,22px)}
+.acard{
+  border:1px solid var(--line);background:var(--bg-2);padding:clamp(20px,2.6vw,30px);
+  display:flex;flex-direction:column;gap:11px;transition:border-color .4s,transform .5s;
+}
+.acard:hover{border-color:rgba(255,67,38,.5);transform:translateY(-4px)}
+.acard b{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;color:var(--accent);text-transform:uppercase}
+.acard h4{font-size:18px;font-weight:700}
+.acard p{font-size:13.5px;color:var(--muted);line-height:1.6;flex:1}
+.acard .go{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;color:var(--cream);border-top:1px solid var(--line);padding-top:12px;display:flex;justify-content:space-between;gap:10px}
+.acard .go em{font-style:normal;color:var(--accent)}
+
+/* ============================================================
+   17. פוטר
+   ============================================================ */
+footer{border-top:1px solid var(--line);padding:clamp(56px,8vw,100px) 0 clamp(30px,4vw,50px);background:var(--bg-2)}
+.foot__big{
+  font-size:clamp(44px,13vw,190px);font-weight:900;line-height:.9;letter-spacing:-.04em;
+  -webkit-text-stroke:1px var(--cream);color:transparent;margin-bottom:clamp(30px,4vw,54px);
+  direction:ltr;text-align:start;
+}
+.foot__cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:26px;margin-bottom:40px}
+.foot__cols h5{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;color:var(--accent);text-transform:uppercase;margin-bottom:13px}
+.foot__cols a,.foot__cols p{display:block;font-size:13px;color:var(--muted);margin-bottom:7px;transition:color .3s;line-height:1.5}
+.foot__cols a:hover{color:var(--cream)}
+.foot__note{
+  font-size:12.5px;line-height:1.72;color:var(--muted);max-width:88ch;
+  padding:20px 0 26px;border-top:1px solid var(--line);margin-bottom:4px;
+}
+.foot__end{
+  border-top:1px solid var(--line);padding-top:24px;display:flex;justify-content:space-between;
+  gap:14px;flex-wrap:wrap;font-family:'JetBrains Mono',monospace;font-size:10.5px;
+  letter-spacing:.1em;color:var(--muted);text-transform:uppercase;
+}
+.foot__end a{color:var(--accent)}
+.foot__end a:hover{color:var(--cream)}
+
+/* ============================================================
+   18. עזרי אנימציה
+   ============================================================ */
+[data-reveal]{opacity:0;transform:translateY(28px)}
+[data-fade]{opacity:0}
+@media(prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms!important;transition-duration:.01ms!important}
+  [data-reveal],[data-fade]{opacity:1!important;transform:none!important}
+}
+
+/* ============================================================
+   19. נגישות
+   ============================================================ */
+/* קפיצה לתוכן — מופיע רק בטאב, הדבר הראשון שגולש מקלדת פוגש */
+.skip{
+  position:absolute;inset-inline-start:-9999px;top:0;z-index:999;
+  background:var(--accent);color:#fff;padding:12px 20px;
+  font-weight:700;font-size:14px;
+}
+.skip:focus{inset-inline-start:0}
+/* מיקוד נראה בכל אלמנט אינטראקטיבי — לא מסירים outline בלי תחליף */
+a:focus-visible,button:focus-visible,video:focus-visible,audio:focus-visible,[tabindex]:focus-visible{
+  outline:2px solid var(--accent);outline-offset:3px;border-radius:2px;
+}
+/* לקוראי מסך בלבד */
+.sr-only{
+  position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+  overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;
+}
+/* מצב ניגודיות גבוהה */
+@media(prefers-contrast:more){
+  :root{--muted:#c4c4cc;--line:rgba(242,239,233,.35)}
+}
+</style>
+</head>
+
+<body class="loading">
+
+<!-- ========== פרילואדר ========== -->
+<div id="pre"><div class="pre-in">
+  <div class="pre-mark">MINIMAX <span class="acc">H3</span></div>
+  <div class="pre-bar"><i></i></div>
+</div></div>
+
+<a class="skip" href="#main" data-en="Skip to content" data-he="דלג לתוכן">Skip to content</a>
+
+<!-- ========== הדר ========== -->
+<header>
+  <div class="brand">MINIMAX <i>H3</i></div>
+  <nav class="hnav" aria-label="Primary">
+    <a class="hlink" href="#capabilities" data-en="Capabilities" data-he="יכולות">Capabilities</a>
+    <a class="hlink" href="#demos" data-en="Demos" data-he="דמואים">Demos</a>
+    <a class="hlink" href="#make" data-en="What you can make" data-he="מה אפשר ליצור">What you can make</a>
+    <a class="hlink" href="#pricing" data-en="Pricing" data-he="מחיר">Pricing</a>
+    <a class="hlink" href="#prompting" data-en="Prompting" data-he="פרומפטים">Prompting</a>
+    <a class="hlink" href="#start" data-en="Start" data-he="להתחיל">Start</a>
+    <div class="lang" role="group" aria-label="Language / שפה">
+      <button id="btn-en" type="button" aria-pressed="true" lang="en" aria-label="Switch to English">EN</button>
+      <button id="btn-he" type="button" aria-pressed="false" lang="he" aria-label="החלף לעברית">עב</button>
+    </div>
+  </nav>
+</header>
+
+<main id="main">
+
+<!-- ============================================================
+     הירו — Animmaster · Scroll Animation/10 (telescope-zoom)
+     ============================================================ -->
+<section class="hero" id="hero">
+
+  <!-- מדיה טלסקופית -->
+  <div class="hero__media">
+    <div class="hero__media__back">
+      <video aria-hidden="true" tabindex="-1" src="assets/video/03-2k-performance.mp4" poster="assets/poster/03-2k-performance.jpg"
+             muted loop playsinline preload="auto" data-hero-video></video>
+    </div>
+    <div aria-hidden="true" class="hero__media__front f1"><img src="assets/poster/03-2k-performance.jpg" loading="lazy" alt=""></div>
+    <div aria-hidden="true" class="hero__media__front f2"><img src="assets/poster/03-2k-performance.jpg" loading="lazy" alt=""></div>
+    <div aria-hidden="true" class="hero__media__front f3"><img src="assets/poster/03-2k-performance.jpg" loading="lazy" alt=""></div>
+    <div aria-hidden="true" class="hero__media__front f4"><img src="assets/poster/03-2k-performance.jpg" loading="lazy" alt=""></div>
+    <div aria-hidden="true" class="hero__media__front f5"><img src="assets/poster/03-2k-performance.jpg" loading="lazy" alt=""></div>
+    <div aria-hidden="true" class="hero__media__front f6"><img src="assets/poster/03-2k-performance.jpg" loading="lazy" alt=""></div>
+  </div>
+
+  <!-- אריחים טסים לעבר המצלמה -->
+  <div class="hero__tiles" aria-hidden="true">
+    <img src="assets/poster/05-film-opening-titles.jpg" loading="lazy" alt="">
+    <img src="assets/poster/08-advertising-ecommerce.jpg" loading="lazy" alt="">
+    <img src="assets/poster/02-multimodal-context-result.jpg" loading="lazy" alt="">
+    <img src="assets/poster/06-product-website.jpg" loading="lazy" alt="">
+    <img src="assets/poster/04-native-stereo-sound.jpg" loading="lazy" alt="">
+    <img src="assets/poster/07-animated-poster.jpg" loading="lazy" alt="">
+    <img src="assets/poster/01-input-reference-video.jpg" loading="lazy" alt="">
+    <img src="assets/poster/03-2k-performance.jpg" loading="lazy" alt="">
+    <img src="assets/poster/05-film-opening-titles.jpg" loading="lazy" alt="">
+    <img src="assets/poster/06-product-website.jpg" loading="lazy" alt="">
+  </div>
+
+  <div class="hero__badge">
+    <div class="kicker" data-en="Released July 31, 2026 · Open weights Aug 3" data-he="שוחרר 31.07.2026 · משקלים פתוחים 03.08">Released July 31, 2026 · Open weights Aug 3</div>
+  </div>
+
+  <!-- כותרת מותג — LTR קבוע בשתי השפות -->
+  <!-- ה-span החיצוני נושא את פיצול ה---progress מה-CSS;
+       ה-b הפנימי הוא מה ש-GSAP מנפיש בכניסה, כדי ששני ה-transform
+       לא ידרסו זה את זה (באג שנתפס באימות בדפדפן) -->
+  <h1 class="hero__title" dir="ltr"><span class="left"><b>MINIMAX</b></span><span class="right"><b>H3</b></span></h1>
+
+  <div class="hero__meta">
+    <p class="hero__sub"
+       data-en="A 33B omni-modal model that generates 15 seconds of native 2K video with stereo audio in a single pass — for $0.13 a second."
+       data-he="מודל אומני-מודאלי של 33 מיליארד פרמטרים שמייצר 15 שניות של וידאו 2K עם סאונד סטריאו בפעולה אחת — ב-0.13 דולר לשנייה.">A 33B omni-modal model that generates 15 seconds of native 2K video with stereo audio in a single pass — for $0.13 a second.</p>
+    <div class="hero__scroll"><i></i><span data-en="Scroll" data-he="גלול">Scroll</span></div>
+  </div>
+</section>
+
+<!-- ========== רצועת מספרים ========== -->
+<section class="stats">
+  <div class="stats__grid">
+    <div class="stat"><b class="mono"><span data-count="0.13" data-dec="2" data-pre="$">$0.13</span></b><span data-en="per second at 2K" data-he="לשנייה ב-2K">per second at 2K</span></div>
+    <div class="stat"><b class="mono">2560<span style="opacity:.4">×</span>1440</b><span data-en="verified native 2K" data-he="2K נייטיב מאומת">verified native 2K</span></div>
+    <div class="stat"><b class="mono"><span data-count="15">15</span>s</b><span data-en="max duration, 24 fps" data-he="אורך מרבי, 24 פריימים">max duration, 24 fps</span></div>
+    <div class="stat"><b class="mono"><span data-count="33">33</span>B</b><span data-en="open-weight parameters" data-he="פרמטרים במשקלים פתוחים">open-weight parameters</span></div>
+    <div class="stat"><b class="mono">#<span data-count="1">1</span></b><span data-en="video editing, Artificial Analysis" data-he="עריכת וידאו, Artificial Analysis">video editing, Artificial Analysis</span></div>
+    <div class="stat"><b class="mono">32<span style="font-size:.55em"> kHz</span></b><span data-en="native stereo, 11 languages" data-he="סטריאו מובנה, 11 שפות">native stereo, 11 languages</span></div>
+  </div>
+</section>
+
+<!-- ========== הוכחת קונטקסט מולטימודאלי ========== -->
+<section class="sec" id="context">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="kicker" data-en="The core idea" data-he="הרעיון המרכזי">The core idea</div>
+      <h2 class="sec-title">
+        <span class="hl"><span data-en="One prompt." data-he="פרומפט אחד.">One prompt.</span></span>
+        <span class="hl"><span class="outline" data-en="Three modalities." data-he="שלוש מודאליות.">Three modalities.</span></span>
+      </h2>
+      <p class="lead" data-reveal
+         data-en="Most video models take a prompt and maybe an image. H3 reads text, images, video and audio as one unified context, and you describe the relationship between them in plain language. No task switching, no separate endpoints for motion transfer or voice cloning."
+         data-he="רוב מודלי הווידאו מקבלים פרומפט ואולי תמונה. H3 קורא טקסט, תמונות, וידאו ואודיו כקונטקסט אחד מאוחד — ואתה מתאר את הקשר ביניהם בשפה חופשית. בלי החלפת מצבים, בלי endpoint נפרד להעברת תנועה או לשכפול קול.">Most video models take a prompt and maybe an image. H3 reads text, images, video and audio as one unified context, and you describe the relationship between them in plain language.</p>
+    </div>
+
+    <div class="proof">
+      <div class="proof__prompt" data-reveal dir="ltr">
+        <span class="mono" style="color:var(--muted);font-size:.8em;letter-spacing:.18em">PROMPT — VERBATIM FROM MINIMAX</span><br><br>
+        “Reference the Hitchcock camera movement from <em>Video 1</em>, have the character in <em>Image 2</em> sing, with the vocals matching <em>Audio 3</em>.”
+      </div>
+
+      <div class="proof__flow">
+        <div class="proof__ins">
+          <div class="pin-card" data-reveal>
+            <img class="pv" src="assets/poster/01-input-reference-video.jpg" loading="lazy" alt="Frame from the reference clip supplying the Hitchcock dolly-zoom camera move">
+            <div class="pt"><b>Video 1</b><span data-en="Camera movement reference — a Hitchcock dolly zoom" data-he="רפרנס תנועת מצלמה — דולי-זום היצ'קוקיאני">Camera movement reference — a Hitchcock dolly zoom</span></div>
+          </div>
+          <div class="pin-card" data-reveal>
+            <img class="pv" src="assets/img/h3-input-image.jpg" loading="lazy" alt="The input portrait defining the character's face, hair and wardrobe">
+            <div class="pt"><b>Image 2</b><span data-en="Character identity — face, hair, wardrobe" data-he="זהות הדמות — פנים, שיער, לבוש">Character identity — face, hair, wardrobe</span></div>
+          </div>
+          <div class="pin-card is-audio" data-reveal>
+            <div class="pt"><b>Audio 3</b><span data-en="The vocal performance to match" data-he="ההופעה הקולית שיש להתאים">The vocal performance to match</span></div>
+            <audio controls preload="none" aria-label="Reference vocal track used as Audio 3" src="assets/audio/h3-input-audio.mp3"></audio>
+          </div>
+        </div>
+
+        <div class="proof__arrow mono">→</div>
+
+        <div class="proof__out" data-reveal>
+          <video aria-label="H3 output combining a reference video, a reference image and a reference audio track" src="assets/video/02-multimodal-context-result.mp4"
+                 poster="assets/poster/02-multimodal-context-result.jpg"
+                 muted loop playsinline preload="none" controls data-autoplay></video>
+          <div class="cap">
+            <span data-en="H3 output · source 2560×1440 · 6.6s" data-he="פלט H3 · מקור 2560×1440 · 6.6 שניות">H3 output · source 2560×1440 · 6.6s</span>
+            <span class="acc" data-en="Unmute for audio" data-he="בטל השתקה לשמיעה">Unmute for audio</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== היכולות בפורמט קריא ========== -->
+<section class="sec" id="capabilities">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="kicker" data-en="Capabilities" data-he="יכולות">Capabilities</div>
+      <h2 class="sec-title"><span class="hl"><span data-en="Eight things worth knowing" data-he="שמונה דברים ששווה לדעת">Eight things worth knowing</span></span></h2>
+    </div>
+    <div class="caps">
+      <div class="cap" data-reveal><b>01 · Omni-reference</b><h4 data-en="9 images, 3 videos, 3 audio clips" data-he="9 תמונות, 3 סרטונים, 3 קטעי אודיו">9 images, 3 videos, 3 audio clips</h4><p data-en="Up to 12 files in one request. Give each reference exactly one job — identity, wardrobe, lighting, motion, voice." data-he="עד 12 קבצים בבקשה אחת. תן לכל רפרנס תפקיד אחד בדיוק — זהות, לבוש, תאורה, תנועה, קול.">Up to 12 files in one request. Give each reference exactly one job — identity, wardrobe, lighting, motion, voice.</p></div>
+      <div class="cap" data-reveal><b>02 · Native audio</b><h4 data-en="Stereo generated in the same pass" data-he="סטריאו שנוצר באותה פעולה">Stereo generated in the same pass</h4><p data-en="32 kHz dialogue, SFX and ambience — jointly modelled, not bolted on afterwards. 11 languages are stable." data-he="דיאלוג, אפקטים ואווירה ב-32 קילו-הרץ — ממודלים יחד, לא מודבקים בדיעבד. 11 שפות יציבות.">32 kHz dialogue, SFX and ambience — jointly modelled, not bolted on afterwards. 11 languages are stable.</p></div>
+      <div class="cap" data-reveal><b>03 · Multi-shot</b><h4 data-en="Cuts inside a single generation" data-he="חיתוכים בתוך ג'נרציה אחת">Cuts inside a single generation</h4><p data-en="Native multi-shot modelling means a 15-second clip can contain real edits, not one unbroken take." data-he="מידול מולטי-שוט נייטיב — קליפ של 15 שניות יכול להכיל חיתוכים אמיתיים, לא טייק אחד רצוף.">Native multi-shot modelling means a 15-second clip can contain real edits, not one unbroken take.</p></div>
+      <div class="cap" data-reveal><b>04 · Editing</b><h4 data-en="Change a clip by describing it" data-he="שינוי קליפ על ידי תיאור">Change a clip by describing it</h4><p data-en="Swap a character, alter an object, change the sound or re-pace — without re-rolling the whole generation. This is the task H3 ranks #1 in." data-he="החלפת דמות, שינוי אובייקט, החלפת סאונד או קצב — בלי ג'נרוט מחדש. זו המשימה שבה H3 מדורג ראשון.">Swap a character, alter an object, change the sound or re-pace — without re-rolling. This is the task H3 ranks #1 in.</p></div>
+      <div class="cap" data-reveal><b>05 · Text &amp; brands</b><h4 data-en="Legible type, real logos" data-he="טקסט קריא, לוגואים אמיתיים">Legible type, real logos</h4><p data-en="One of H3's genuinely unusual strengths: it renders small text and real brand marks accurately on request." data-he="אחת החוזקות החריגות באמת של H3 — הוא מרנדר טקסט קטן וסימני מותג אמיתיים בצורה מדויקת.">One of H3's genuinely unusual strengths: it renders small text and real brand marks accurately on request.</p></div>
+      <div class="cap" data-reveal><b>06 · V2V motion</b><h4 data-en="Transfer camera and motion" data-he="העברת מצלמה ותנועה">Transfer camera and motion</h4><p data-en="Point at a reference clip and H3 lifts its camera move and pacing onto entirely new subjects." data-he="הצבע על קליפ רפרנס ו-H3 יעביר את תנועת המצלמה והקצב שלו לסובייקטים חדשים לגמרי.">Point at a reference clip and H3 lifts its camera move and pacing onto entirely new subjects.</p></div>
+      <div class="cap" data-reveal><b>07 · In-context 2K</b><h4 data-en="Regeneration, not upscaling" data-he="רג'נרציה, לא אפסקיילינג">Regeneration, not upscaling</h4><p data-en="Instead of a bolt-on super-res module, the base model regenerates its own output while re-reading the original context — recovering small text an upscaler can only guess at." data-he="במקום מודול סופר-רזולוציה מודבק, מודל הבסיס מייצר מחדש את הפלט שלו תוך קריאה חוזרת של הקונטקסט המקורי — ומשחזר טקסט קטן שאפסקיילר יכול רק לנחש.">Instead of a bolt-on super-res module, the base model regenerates its own output while re-reading the original context.</p></div>
+      <div class="cap" data-reveal><b>08 · Aspect ratios</b><h4 data-en="21:9 through 9:16" data-he="מ-21:9 עד 9:16">21:9 through 9:16</h4><p data-en="Cinematic scope, square, and vertical for social — all native, no cropping pass required." data-he="סקופ קולנועי, ריבוע ואנכי לסושיאל — הכול נייטיב, בלי מעבר חיתוך.">Cinematic scope, square, and vertical for social — all native, no cropping pass required.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     שואוקייס — Animmaster · Scroll Animation/16 (sticky-grid-scroll)
+     ============================================================ -->
+<section class="showcase" id="showcase">
+  <div class="showcase__pin">
+    <div class="showcase__grid" aria-hidden="true">
+      <div class="showcase__item"><img src="assets/poster/05-film-opening-titles.jpg" loading="lazy" alt=""></div>
+      <div class="showcase__item"><img src="assets/poster/06-product-website.jpg" loading="lazy" alt=""></div>
+      <div class="showcase__item"><img src="assets/poster/08-advertising-ecommerce.jpg" loading="lazy" alt=""></div>
+      <div class="showcase__item"><img src="assets/poster/02-multimodal-context-result.jpg" loading="lazy" alt=""></div>
+      <div class="showcase__item"><img src="assets/poster/03-2k-performance.jpg" loading="lazy" alt=""></div>
+      <div class="showcase__item"><img src="assets/poster/07-animated-poster.jpg" loading="lazy" alt=""></div>
+      <div class="showcase__item"><img src="assets/poster/04-native-stereo-sound.jpg" loading="lazy" alt=""></div>
+      <div class="showcase__item"><img src="assets/poster/01-input-reference-video.jpg" loading="lazy" alt=""></div>
+      <div class="showcase__item"><img src="assets/poster/06-product-website.jpg" loading="lazy" alt=""></div>
+    </div>
+    <div class="showcase__cap">
+      <h2 data-en="Eight official demos" data-he="שמונה דמואים רשמיים">Eight official demos</h2>
+      <p data-en="Every clip below was published by MiniMax and is bundled with this guide — downloaded, not embedded." data-he="כל קליפ למטה פורסם על ידי MiniMax ומצורף למדריך הזה — הורד, לא מוטמע מרחוק.">Every clip below was published by MiniMax and is bundled with this guide.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========== תצוגות וידאו ========== -->
+<section class="sec" id="demos">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="kicker" data-en="Watch it work" data-he="תראה את זה עובד">Watch it work</div>
+      <h2 class="sec-title">
+        <span class="hl"><span data-en="The demos," data-he="הדמואים,">The demos,</span></span>
+        <span class="hl"><span class="outline" data-en="with sound." data-he="עם סאונד.">with sound.</span></span>
+      </h2>
+      <p class="lead" data-reveal
+         data-en="These play muted by default. Unmute at least one — the audio is generated by the same model in the same pass, and it is the single thing hardest to appreciate from a screenshot."
+         data-he="הסרטונים מתנגנים מושתקים כברירת מחדל. בטל השתקה לפחות באחד — האודיו נוצר על ידי אותו מודל באותה פעולה, וזה בדיוק הדבר שהכי קשה להעריך מצילום מסך.">These play muted by default. Unmute at least one.</p>
+    </div>
+
+    <div class="vfull" data-reveal>
+      <video aria-label="MiniMax H3 native stereo sound showcase, 21:9, 15 seconds" src="assets/video/04-native-stereo-sound.mp4" poster="assets/poster/04-native-stereo-sound.jpg"
+             muted loop playsinline controls preload="none" data-autoplay></video>
+      <div class="vfull__bar">
+        <b data-en="Native stereo sound" data-he="סאונד סטריאו מובנה">Native stereo sound</b>
+        <span data-en="Source 2944×1248 · 21:9 · 15.1s — MiniMax's own audio showcase" data-he="מקור 2944×1248 · 21:9 · 15.1 שניות — הדגמת האודיו הרשמית של MiniMax">Source 2944×1248 · 21:9 · 15.1s</span>
+        <span class="sound-note" data-en="Unmute this one" data-he="בטל השתקה בזה">Unmute this one</span>
+      </div>
+    </div>
+
+    <div class="vgrid">
+      <div class="vcard" data-reveal>
+        <video aria-label="MiniMax H3 demo: film opening titles with legible on-screen type" src="assets/video/05-film-opening-titles.mp4" poster="assets/poster/05-film-opening-titles.jpg" muted loop playsinline controls preload="none" data-autoplay></video>
+        <div class="vcard__body">
+          <b data-en="Use case 01" data-he="שימוש 01">Use case 01</b>
+          <h3 data-en="Film opening titles" data-he="כותרות פתיחה לסרט">Film opening titles</h3>
+          <p data-en="Type rendered legibly inside a moving shot — the thing most video models still smear into nonsense." data-he="טיפוגרפיה שמרונדרת קריא בתוך שוט נע — בדיוק מה שרוב מודלי הווידאו עדיין הופכים לג'יבריש.">Type rendered legibly inside a moving shot.</p>
+          <div class="vcard__meta"><span class="chip">src 2560×1440</span><span class="chip">15.1s</span><span class="chip">16:9</span></div>
+        </div>
+      </div>
+
+      <div class="vcard" data-reveal>
+        <video aria-label="MiniMax H3 demo: a product website with UI detail and brand marks" src="assets/video/06-product-website.mp4" poster="assets/poster/06-product-website.jpg" muted loop playsinline controls preload="none" data-autoplay></video>
+        <div class="vcard__body">
+          <b data-en="Use case 02" data-he="שימוש 02">Use case 02</b>
+          <h3 data-en="Product website" data-he="אתר מוצר">Product website</h3>
+          <p data-en="UI surfaces, product detail and brand marks holding together across a full 15-second move." data-he="ממשקים, פרטי מוצר וסימני מותג שנשארים יציבים לאורך תנועה מלאה של 15 שניות.">UI, product detail and brand marks holding together.</p>
+          <div class="vcard__meta"><span class="chip">src 2560×1440</span><span class="chip">15.1s</span><span class="chip">16:9</span></div>
+        </div>
+      </div>
+
+      <div class="vcard is-vert" data-reveal>
+        <video aria-label="MiniMax H3 demo: a vertical animated poster" src="assets/video/07-animated-poster.mp4" poster="assets/poster/07-animated-poster.jpg" muted loop playsinline controls preload="none" data-autoplay></video>
+        <div class="vcard__body">
+          <b data-en="Use case 03" data-he="שימוש 03">Use case 03</b>
+          <h3 data-en="Animated poster" data-he="פוסטר מונפש">Animated poster</h3>
+          <p data-en="Native 9:16 at 1440×2560 — generated vertical, not cropped down from landscape." data-he="9:16 נייטיב ב-1440×2560 — נוצר אנכי, לא נחתך מפורמט רוחבי.">Native 9:16 at 1440×2560.</p>
+          <div class="vcard__meta"><span class="chip">src 1440×2560</span><span class="chip">10.1s</span><span class="chip">9:16</span></div>
+        </div>
+      </div>
+
+      <div class="vcard is-vert" data-reveal>
+        <video aria-label="MiniMax H3 demo: a vertical advertising and e-commerce clip" src="assets/video/08-advertising-ecommerce.mp4" poster="assets/poster/08-advertising-ecommerce.jpg" muted loop playsinline controls preload="none" data-autoplay></video>
+        <div class="vcard__body">
+          <b data-en="Use case 04" data-he="שימוש 04">Use case 04</b>
+          <h3 data-en="Advertising &amp; e-commerce" data-he="פרסום ומסחר">Advertising &amp; e-commerce</h3>
+          <p data-en="The commercial case MiniMax leads with: product, packaging and on-screen copy in one pass." data-he="התרחיש המסחרי ש-MiniMax מובילה איתו: מוצר, אריזה וקופי על המסך בפעולה אחת.">Product, packaging and on-screen copy in one pass.</p>
+          <div class="vcard__meta"><span class="chip">src 1440×2560</span><span class="chip">15.1s</span><span class="chip">9:16</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== תמחור ========== -->
+<section class="sec" id="pricing">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="kicker" data-en="Pricing" data-he="תמחור">Pricing</div>
+      <h2 class="sec-title">
+        <span class="hl"><span data-en="Where H3 actually" data-he="איפה H3 באמת">Where H3 actually</span></span>
+        <span class="hl"><span class="outline" data-en="breaks the market." data-he="שובר את השוק.">breaks the market.</span></span>
+      </h2>
+      <p class="lead" data-reveal
+         data-en="MiniMax's claim is that at 2K the per-second price is less than a third of mainstream models, and at 768p less than half the price of their 720p. The direct API and fal quote identical rates."
+         data-he="הטענה של MiniMax היא שב-2K המחיר לשנייה נמוך משליש ממודלים מרכזיים, וב-768p פחות ממחצית המחיר של 720p אצלם. ה-API הישיר ו-fal מצטטים תעריפים זהים.">The direct API and fal quote identical rates.</p>
+    </div>
+
+    <div class="price">
+      <div class="pcard" data-reveal>
+        <b>768p</b><span class="pv">$0.08</span><span class="pu" data-en="per second" data-he="לשנייה">per second</span>
+        <div class="pl">
+          <i><span data-en="5 seconds" data-he="5 שניות">5 seconds</span><span>$0.40</span></i>
+          <i><span data-en="15 seconds" data-he="15 שניות">15 seconds</span><span>$1.20</span></i>
+        </div>
+      </div>
+      <div class="pcard hot" data-reveal>
+        <b data-en="2K · default" data-he="2K · ברירת מחדל">2K · default</b><span class="pv">$0.13</span><span class="pu" data-en="per second" data-he="לשנייה">per second</span>
+        <div class="pl">
+          <i><span data-en="5 seconds" data-he="5 שניות">5 seconds</span><span>$0.65</span></i>
+          <i><span data-en="15 seconds" data-he="15 שניות">15 seconds</span><span>$1.95</span></i>
+        </div>
+      </div>
+      <div class="pcard" data-reveal>
+        <b>4K</b><span class="pv">$0.16</span><span class="pu" data-en="per second" data-he="לשנייה">per second</span>
+        <div class="pl">
+          <i><span data-en="5 seconds" data-he="5 שניות">5 seconds</span><span>$0.80</span></i>
+          <i><span data-en="15 seconds" data-he="15 שניות">15 seconds</span><span>$2.40</span></i>
+        </div>
+      </div>
+      <div class="pcard" data-reveal>
+        <b data-en="Local" data-he="מקומי">Local</b><span class="pv">$0</span><span class="pu" data-en="open weights, 768p cap" data-he="משקלים פתוחים, תקרת 768p">open weights, 768p cap</span>
+        <div class="pl">
+          <i><span data-en="Hardware" data-he="חומרה">Hardware</span><span>~12–24GB</span></i>
+          <i><span data-en="Territory limits" data-he="הגבלות טריטוריה">Territory limits</span><span data-en="yes" data-he="כן">yes</span></i>
+        </div>
+      </div>
+    </div>
+
+    <div class="tscroll" data-reveal>
+      <table class="tbl">
+        <thead><tr>
+          <th data-en="Watch out for" data-he="שים לב ל">Watch out for</th>
+          <th data-en="Detail" data-he="פירוט">Detail</th>
+        </tr></thead>
+        <tbody>
+          <tr><td data-en="Reseller markup" data-he="תוספת מחיר של מפיצים">Reseller markup</td><td data-en="Some third-party resellers quote $0.26/s for 2K — roughly double the direct rate. Buy from MiniMax or fal." data-he="חלק מהמפיצים מצטטים 0.26 דולר לשנייה ב-2K — בערך כפול מהתעריף הישיר. קנה ישירות מ-MiniMax או מ-fal.">Some resellers quote $0.26/s — roughly double. Buy direct.</td></tr>
+          <tr><td data-en="No prepaid packs" data-he="אין חבילות מראש">No prepaid packs</td><td data-en="MiniMax's video point packages cover Hailuo 2.3 and 02 only. H3 is pay-as-you-go for now." data-he="חבילות נקודות הווידאו של MiniMax מכסות רק את Hailuo 2.3 ו-02. H3 הוא תשלום לפי שימוש בינתיים.">Video point packages cover Hailuo 2.3 and 02 only.</td></tr>
+          <tr><td data-en="Failed generations" data-he="ג'נרציות שנכשלו">Failed generations</td><td data-en="A silently filtered generation still bills for the full duration. Budget for retries." data-he="ג'נרציה שסוננה בשקט עדיין מחויבת במלוא האורך. תכנן תקציב לניסיונות חוזרים.">A silently filtered generation still bills in full.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ========== מה אפשר לעשות איתו ========== -->
+<section class="sec" id="make" style="background:var(--bg-2);border-block:1px solid var(--line)">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="kicker" data-en="What you can make" data-he="מה אפשר ליצור">What you can make</div>
+      <h2 class="sec-title">
+        <span class="hl"><span data-en="Things other models" data-he="דברים שמודלים אחרים">Things other models</span></span>
+        <span class="hl"><span class="outline" data-en="simply refuse." data-he="פשוט מסרבים להם.">simply refuse.</span></span>
+      </h2>
+      <p class="lead" data-reveal
+         data-en="This is the part people underestimate. H3 is unusually open about the real world — real products, real people, real tone — which is exactly what makes it usable for actual commercial work rather than just pretty test clips."
+         data-he="זה החלק שאנשים ממעיטים בערכו. H3 פתוח בצורה חריגה לעולם האמיתי — מוצרים אמיתיים, אנשים אמיתיים, טון אמיתי — ובדיוק בגלל זה הוא שימושי לעבודה מסחרית אמיתית ולא רק לקליפים יפים.">H3 is unusually open about the real world — which is what makes it usable for actual commercial work.</p>
+    </div>
+
+    <div class="truth">
+      <div class="tcard ok" data-reveal>
+        <header><span class="dot"></span><span class="tag" data-en="Real brands" data-he="מותגים אמיתיים">Real brands</span></header>
+        <h4 data-en="Logos and packaging that actually look right" data-he="לוגואים ואריזות שבאמת נראים נכון">Logos and packaging that actually look right</h4>
+        <p data-en="Ask for a Nike swoosh or a Coca-Cola can and you get one, rendered cleanly. For product and e-commerce work this alone is worth the switch." data-he="בקש לוגו של נייקי או פחית קוקה-קולה — ותקבל, מרונדר נקי. לעבודת מוצר ומסחר זה לבד שווה את המעבר.">Ask for a Nike swoosh or a Coca-Cola can and you get one, rendered cleanly.</p>
+      </div>
+
+      <div class="tcard ok" data-reveal>
+        <header><span class="dot"></span><span class="tag" data-en="Real people" data-he="אנשים אמיתיים">Real people</span></header>
+        <h4 data-en="Public figures — with their voice and lip-sync" data-he="דמויות ציבוריות — עם הקול והליפסינק שלהן">Public figures — with their voice and lip-sync</h4>
+        <p data-en="Name a well-known public figure and H3 returns a clean, accurate generation — likeness, a matching voice, and lip-sync locked to the dialogue. The model is strikingly current about the real world." data-he="ציין דמות ציבורית מוכרת ו-H3 יחזיר ג׳נרוט נקי ומדויק — דמיון, קול תואם וליפסינק נעול על הדיאלוג. המודל מעודכן בצורה יוצאת דופן לגבי העולם האמיתי.">Name a well-known public figure and H3 returns likeness, a matching voice, and locked lip-sync.</p>
+      </div>
+
+      <div class="tcard ok" data-reveal>
+        <header><span class="dot"></span><span class="tag" data-en="Real tone" data-he="טון אמיתי">Real tone</span></header>
+        <h4 data-en="Tension, action and atmosphere" data-he="מתח, אקשן ואווירה">Tension, action and atmosphere</h4>
+        <p data-en="Weapons, danger and dramatic tension all clear when they serve the scene — a rifle in a gameplay shot, a blade half-drawn, a look that holds a beat too long. You can direct real drama." data-he="נשק, סכנה ומתח דרמטי עוברים כשהם משרתים את הסצנה — רובה בשוט גיימפליי, להב שנשלף למחצית, מבט שנמשך רגע אחד יותר מדי. אפשר לביים דרמה אמיתית.">Weapons, danger and dramatic tension all clear when they serve the scene.</p>
+      </div>
+    </div>
+
+    <p class="softnote" data-reveal
+       data-en="One practical note: studio-owned characters are the exception and will be refused, so build your own characters rather than borrowing famous ones. Your use is still governed by MiniMax's terms — see the notes page."
+       data-he="הערה מעשית אחת: דמויות שבבעלות אולפנים הן היוצא מן הכלל ויסורבו, אז עדיף לבנות דמויות משלך במקום לשאול מפורסמות. השימוש שלך עדיין כפוף לתנאי MiniMax — ראה עמוד ההערות.">Studio-owned characters are the exception. Your use is governed by MiniMax's terms — see the notes page.</p>
+  </div>
+</section>
+
+<!-- ========== פרומפטינג ========== -->
+<section class="sec" id="prompting">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="kicker" data-en="How to prompt it" data-he="איך לכתוב לו פרומפט">How to prompt it</div>
+      <h2 class="sec-title">
+        <span class="hl"><span data-en="Give every reference" data-he="תן לכל רפרנס">Give every reference</span></span>
+        <span class="hl"><span class="outline" data-en="exactly one job." data-he="תפקיד אחד בדיוק.">exactly one job.</span></span>
+      </h2>
+      <p class="lead" data-reveal
+         data-en="That single rule fixes most bad H3 output. Because it reads everything as one context, an ambiguous reference bleeds into places you didn't intend. Name each one and state what it controls."
+         data-he="הכלל הבודד הזה מתקן את רוב הפלטים הגרועים ב-H3. מכיוון שהוא קורא הכול כקונטקסט אחד, רפרנס עמום דולף למקומות שלא התכוונת אליהם. תן שם לכל אחד ואמור מה הוא שולט בו.">That single rule fixes most bad H3 output.</p>
+    </div>
+
+    <div class="formula">
+      <div class="fstep" data-reveal><b>01</b><span data-en="Visual direction — style, lighting, mood" data-he="כיוון ויזואלי — סגנון, תאורה, מצב רוח">Visual direction — style, lighting, mood</span></div>
+      <div class="fstep" data-reveal><b>02</b><span data-en="Reference roles — what each file controls" data-he="תפקידי רפרנס — במה כל קובץ שולט">Reference roles — what each file controls</span></div>
+      <div class="fstep" data-reveal><b>03</b><span data-en="Opening scene — where the clip begins" data-he="סצנת פתיחה — איפה הקליפ מתחיל">Opening scene — where the clip begins</span></div>
+      <div class="fstep" data-reveal><b>04</b><span data-en="Action — in chronological order" data-he="פעולה — בסדר כרונולוגי">Action — in chronological order</span></div>
+      <div class="fstep" data-reveal><b>05</b><span data-en="Camera — one main move per shot" data-he="מצלמה — תנועה מרכזית אחת לשוט">Camera — one main move per shot</span></div>
+      <div class="fstep" data-reveal><b>06</b><span data-en="Dialogue and sound — exact words" data-he="דיאלוג וסאונד — מילים מדויקות">Dialogue and sound — exact words</span></div>
+      <div class="fstep" data-reveal><b>07</b><span data-en="Ending — final pose or action" data-he="סיום — פוזה או פעולה אחרונה">Ending — final pose or action</span></div>
+    </div>
+
+    <div class="code" data-reveal>
+      <div class="code__bar">
+        <span data-en="Worked example · 8 seconds · image + video reference" data-he="דוגמה מלאה · 8 שניות · רפרנס תמונה + וידאו">Worked example · 8 seconds</span>
+        <button class="copy" data-copy data-en="Copy" data-he="העתק">Copy</button>
+      </div>
+<pre>Cinematic live-action product video with warm sunrise light
+and restrained color contrast.
+
+<span class="k">Image 1</span> defines the woman's face, copper hair, and green jacket.
+<span class="k">Image 2</span> defines the rooftop garden and sunrise lighting.
+<span class="k">Video 1</span> provides the woman's measured walking pace, slow camera
+movement, and the warm vocal timbre and calm delivery heard in its audio.
+
+The woman walks along the rooftop path while holding a black travel cup.
+The camera follows her from the front-left with a slow, controlled
+tracking movement. After three steps, she raises the cup, looks toward
+the camera, and says, "Take the morning with you."
+End on a stable close view of her face and the cup.
+
+<span class="c">overall_soundscape:</span> light wind, soft footsteps, fabric movement,
+  clear dialogue.
+<span class="c">non_diegetic_music:</span> N/A</pre>
+    </div>
+
+    <div class="formula" style="margin-top:clamp(26px,3.4vw,42px)">
+      <div class="fstep" data-reveal><b>+</b><span data-en="Give every reference one job — “Image 1 defines the face.”" data-he="תן לכל רפרנס תפקיד אחד — ״Image 1 מגדיר את הפנים״.">Give every reference one job.</span></div>
+      <div class="fstep" data-reveal><b>+</b><span data-en="Tie sound to something visible, not “cinematic audio”." data-he="קשר סאונד למשהו נראה, לא ל״אודיו קולנועי״.">Tie sound to something visible.</span></div>
+      <div class="fstep" data-reveal><b>+</b><span data-en="One sentence of dialogue per 5 seconds of clip." data-he="משפט דיאלוג אחד לכל 5 שניות של קליפ.">One sentence of dialogue per 5 seconds.</span></div>
+      <div class="fstep" data-reveal><b>+</b><span data-en="Start with one subject, one action, one camera move." data-he="התחל עם סובייקט אחד, פעולה אחת, תנועת מצלמה אחת.">Start with one subject, one action, one camera move.</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== איך מתחילים ========== -->
+<section class="sec" id="start" style="background:var(--bg-2);border-block:1px solid var(--line)">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="kicker" data-en="How to start" data-he="איך מתחילים">How to start</div>
+      <h2 class="sec-title"><span class="hl"><span data-en="Three ways in" data-he="שלוש דרכים להתחיל">Three ways in</span></span></h2>
+    </div>
+    <div class="acc-grid">
+      <a class="acard" data-reveal href="https://hailuoai.video/zh-Intl/tools/minimax-h3" target="_blank" rel="noopener noreferrer">
+        <b data-en="Easiest · start here" data-he="הכי קל · התחל כאן">Easiest · start here</b>
+        <h4>Hailuo AI</h4>
+        <p data-en="MiniMax's own app. Type a prompt, get a video. No code, no setup, full feature set — this is where to try it in the next five minutes." data-he="האפליקציה של MiniMax עצמה. כותבים פרומפט, מקבלים וידאו. בלי קוד, בלי התקנה, סט יכולות מלא — כאן מנסים בחמש הדקות הקרובות.">Type a prompt, get a video. No code, no setup.</p>
+        <span class="go"><span>hailuoai.video</span><em>→</em></span>
+      </a>
+      <a class="acard" data-reveal href="https://platform.minimax.io" target="_blank" rel="noopener noreferrer">
+        <b data-en="Cheapest · for volume" data-he="הכי זול · לכמויות">Cheapest · for volume</b>
+        <h4 data-en="MiniMax API" data-he="ה-API של MiniMax">MiniMax API</h4>
+        <p data-en="Model ID MiniMax-H3, billed per second at the direct rate. This is the route if you are generating a lot and want the $0.13 price." data-he="מזהה מודל MiniMax-H3, חיוב לפי שנייה בתעריף הישיר. זו הדרך אם מייצרים הרבה ורוצים את המחיר של 0.13$.">Model ID MiniMax-H3, billed per second at the direct rate.</p>
+        <span class="go"><span>platform.minimax.io</span><em>→</em></span>
+      </a>
+      <a class="acard" data-reveal href="https://fal.ai/minimax-h3" target="_blank" rel="noopener noreferrer">
+        <b data-en="For developers" data-he="למפתחים">For developers</b>
+        <h4>fal.ai</h4>
+        <p data-en="Three ready endpoints — text-to-video, image-to-video and reference-to-video — at the same published rates, with nothing to provision." data-he="שלושה endpoints מוכנים — טקסט-לווידאו, תמונה-לווידאו ורפרנס-לווידאו — באותם תעריפים, בלי להקים כלום.">Three ready endpoints at the same published rates.</p>
+        <span class="go"><span>fal.ai/minimax-h3</span><em>→</em></span>
+      </a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ========== פוטר ========== -->
+<footer>
+  <div class="wrap">
+    <div class="foot__big">MINIMAX H3</div>
+    <div class="foot__cols">
+      <div>
+        <h5 data-en="Primary sources" data-he="מקורות ראשוניים">Primary sources</h5>
+        <a href="https://www.minimax.io/blog/minimax-h3" target="_blank" rel="noopener">minimax.io — announcement</a>
+        <a href="https://www.minimax.io/news/minimax-h3-open-source" target="_blank" rel="noopener">minimax.io — open source</a>
+        <a href="https://huggingface.co/MiniMaxAI/MiniMax-H3" target="_blank" rel="noopener">Hugging Face model card</a>
+      </div>
+      <div>
+        <h5 data-en="Benchmarks" data-he="ביצועים">Benchmarks</h5>
+        <a href="https://artificialanalysis.ai" target="_blank" rel="noopener">Artificial Analysis</a>
+        <a href="https://the-decoder.com/chinas-minimax-h3-is-the-first-open-model-to-top-an-ai-video-ranking/" target="_blank" rel="noopener">The Decoder</a>
+      </div>
+      <div>
+        <h5 data-en="Prompting" data-he="פרומפטים">Prompting</h5>
+        <a href="https://www.rundiffusion.com/minimax-h3-prompt-guide" target="_blank" rel="noopener">RunDiffusion prompt guide</a>
+        <a href="https://blog.comfy.org/p/minimax-h3-day-0-support-in-comfyui" target="_blank" rel="noopener">ComfyUI day-0 support</a>
+      </div>
+      <div>
+        <h5 data-en="Content limits" data-he="מגבלות תוכן">Content limits</h5>
+        <a href="https://www.atlascloud.ai/blog/guides/minimax-h3-content-restrictions" target="_blank" rel="noopener">Atlas Cloud — moderation testing</a>
+        <a href="https://explainx.ai/blog/minimax-h3-open-video-model-hailuo-july-2026" target="_blank" rel="noopener noreferrer">explainX — license analysis</a>
+      </div>
+      <div>
+        <h5 data-en="This site" data-he="האתר הזה">This site</h5>
+        <a href="legal.html#privacy" data-en="Privacy policy" data-he="מדיניות פרטיות">Privacy policy</a>
+        <a href="legal.html#terms" data-en="Terms &amp; disclaimer" data-he="תנאי שימוש והבהרה">Terms &amp; disclaimer</a>
+        <a href="legal.html#credits" data-en="Sources &amp; attribution" data-he="מקורות וייחוס">Sources &amp; attribution</a>
+        <a href="legal.html#a11y" data-en="Accessibility" data-he="נגישות">Accessibility</a>
+      </div>
+    </div>
+
+    <p class="foot__note"
+       data-en="Independent and unofficial. Not published, endorsed or sponsored by MiniMax or Hailuo AI. All demo clips, the reference image and the reference audio are © MiniMax, published on their official announcement page and reproduced here for commentary and review, re-encoded for web delivery. Trademarks belong to their owners. If you own material used here and want it removed, open an issue on the repository and it will be taken down promptly."
+       data-he="עצמאי ולא רשמי. אינו מפורסם, מאושר או ממומן על ידי MiniMax או Hailuo AI. כל קטעי ההדגמה, תמונת הרפרנס וקטע האודיו הם © MiniMax, פורסמו בעמוד ההכרזה הרשמי שלהם ומובאים כאן לצורכי פרשנות וביקורת, בקידוד מחדש להגשה ברשת. סימנים מסחריים שייכים לבעליהם. אם אתם בעלי חומר שנעשה בו שימוש כאן ואתם רוצים שיוסר — פתחו issue במאגר והוא יוסר במהירות.">Independent and unofficial. Not published, endorsed or sponsored by MiniMax or Hailuo AI. All demo clips are © MiniMax, reproduced for commentary and review.</p>
+
+    <div class="foot__end">
+      <span data-en="Unofficial field guide · compiled August 2026" data-he="מדריך שדה לא רשמי · נערך אוגוסט 2026">Unofficial field guide · compiled August 2026</span>
+      <span><a href="legal.html" data-en="Legal, privacy &amp; credits →" data-he="משפטי, פרטיות וקרדיטים ←">Legal, privacy &amp; credits →</a></span>
+    </div>
+  </div>
+</footer>
+
+<!-- integrity = Subresource Integrity. אם ה-CDN ייפרץ והקובץ ישונה ולו בבית אחד,
+     הדפדפן יסרב להריץ אותו במקום להזריק קוד זר לאתר. crossorigin נדרש כדי ש-SRI יאומת. -->
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"
+        integrity="sha384-HOvlOYPIs/zjoIkWUGXkVmXsjr8GuZLV+Q+rcPwmJOVZVpvTSXQChiN4t9Euv9Vc"
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"
+        integrity="sha384-P8VzCVnT9NBUkMrpcIZrJbA7EBjJvh/fJS6PmP+4nLIM284DtsImIv8D0fFjIkeh"
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://unpkg.com/lenis@1.3.4/dist/lenis.min.js"
+        integrity="sha384-FKTX0CNJ8ngN1oGMBReVu7mvjTJyjFiD5etb1NKnYxc+8eFI2O0KWnksTN+oTFcu"
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+/* ============================================================
+   1. אתחול — Lenis + ScrollTrigger
+   ============================================================ */
+gsap.registerPlugin(ScrollTrigger);
+
+const lenis = new Lenis({ lerp:.085, wheelMultiplier:1.05 });
+lenis.on('scroll', ScrollTrigger.update);
+gsap.ticker.add(t => lenis.raf(t * 1000));
+gsap.ticker.lagSmoothing(0);
+window.lenis = lenis;
+
+/* ============================================================
+   2. מתג שפה
+   טקסטים מוחלפים ב-textContent על אלמנטים עלים בלבד —
+   שום אנימציה לא מכוונת ל-span שנוצר דינמית, ולכן
+   החלפת שפה לא שוברת שום טיימליין. רק refresh בסוף.
+   ============================================================ */
+const btnEn = document.getElementById('btn-en');
+const btnHe = document.getElementById('btn-he');
+
+function applyLang(lang){
+  const root = document.documentElement;
+  root.lang = lang;
+  root.dir = (lang === 'he') ? 'rtl' : 'ltr';
+
+  /* עלים בלבד — טקסט נקי */
+  document.querySelectorAll('[data-en]').forEach(el => {
+    const v = el.getAttribute('data-' + lang);
+    if (v !== null && v !== undefined) el.textContent = v;
+  });
+  /* המקרים הבודדים שצריכים תגיות בפנים (למשל <code>) */
+  document.querySelectorAll('[data-en-html]').forEach(el => {
+    const v = el.getAttribute('data-' + lang + '-html');
+    if (v !== null && v !== undefined) el.innerHTML = v;
+  });
+
+  btnEn.setAttribute('aria-pressed', String(lang === 'en'));
+  btnHe.setAttribute('aria-pressed', String(lang === 'he'));
+  document.title = (lang === 'he')
+    ? 'MiniMax H3 — המדריך המלא'
+    : 'MiniMax H3 — The Complete Field Guide';
+
+  try { localStorage.setItem('h3lang', lang); } catch(e){}
+  ScrollTrigger.refresh();
+}
+btnEn.addEventListener('click', () => applyLang('en'));
+btnHe.addEventListener('click', () => applyLang('he'));
+
+let saved = 'en';
+try { saved = localStorage.getItem('h3lang') || 'en'; } catch(e){}
+if (saved === 'he') applyLang('he');
+
+/* ============================================================
+   3. פרילואדר + רשת ביטחון
+   הטיימליין של GSAP רץ על ה-ticker, וה-ticker קפוא בטאב מוסתר
+   או אם ה-CDN נפל. בלי הרשת הזו הדף נשאר מסך שחור לנצח.
+   setTimeout רץ גם כשהטאב מוסתר — ולכן הוא המנגנון הנכון כאן.
+   ============================================================ */
+/* מסיר את מסך הטעינה — פעולה זולה ובטוחה בכל מצב */
+function dropPreloader(){
+  const pre = document.getElementById('pre');
+  if (pre) pre.remove();
+  document.body.classList.remove('loading');
+}
+/* מציג את כל התוכן סטטית — רק כשאין GSAP בכלל */
+function revealAll(){
+  document.querySelectorAll('[data-reveal],[data-fade]').forEach(el => {
+    el.style.opacity = '1'; el.style.transform = 'none';
+  });
+  document.querySelectorAll('[data-bar]').forEach(el => { el.style.width = el.dataset.bar + '%'; });
+  document.querySelectorAll('[data-count]').forEach(el => {
+    const dec = parseInt(el.dataset.dec || '0', 10);
+    el.textContent = (el.dataset.pre || '') + parseFloat(el.dataset.count).toFixed(dec);
+  });
+}
+function failSafe(){ dropPreloader(); revealAll(); }
+
+/* הטיימר לא מבוטל בשום שלב — הוא בודק בעצמו אם הפרילואדר כבר ירד.
+   כך הוא עדיין מציל אותנו כשה-ticker קפוא (טאב מוסתר) אחרי load. */
+setTimeout(() => {
+  if (!document.getElementById('pre')) return;   // הכול תקין, הטיימליין סיים
+  dropPreloader();
+  if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') revealAll();
+}, 2600);
+
+/* כשחוזרים לטאב — מסנכרנים מחדש אחרי שה-rAF היה קפוא */
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden && typeof ScrollTrigger !== 'undefined') ScrollTrigger.refresh();
+});
+
+function bootPreloader(){
+  const pre = document.getElementById('pre');
+  if (!pre) return;
+  const bar = pre.querySelector('.pre-bar i');
+  gsap.timeline()
+    .to(bar, { width:'100%', duration:.85, ease:'power2.inOut' })
+    .to(pre, { autoAlpha:0, duration:.6, ease:'power2.out',
+      onComplete(){ pre.remove(); document.body.classList.remove('loading'); ScrollTrigger.refresh(); } })
+    .from('.hero__title b', { yPercent:118, duration:1.1, stagger:.07, ease:'power4.out' }, '-=.35')
+    .from('.hero__badge, .hero__meta', { opacity:0, y:24, duration:.9, stagger:.1, ease:'power3.out' }, '-=.75');
+}
+
+/* ============================================================
+   4. הירו — Animmaster · Scroll Animation/10 (telescope-zoom)
+   פורט מ-ScrollSmoother ל-Lenis. המנגנון המקורי נשמר:
+   אריחים טסים ב-z עם stagger from:'center',
+   ושכבות front מתרחבות ל-scale 1 ומאבדות blur.
+   ============================================================ */
+function initHero(){
+  const hero  = document.querySelector('.hero');
+  const tiles = hero.querySelectorAll('.hero__tiles img');
+  const fronts= hero.querySelectorAll('.hero__media__front');
+
+  gsap.set(tiles, { transformStyle:'preserve-3d', backfaceVisibility:'hidden', force3D:true });
+
+  const tl = gsap.timeline({
+    scrollTrigger:{
+      trigger: hero,
+      start:'top top',
+      end:'+=220%',
+      scrub:.6,
+      pin:true,
+      anticipatePin:1,
+      invalidateOnRefresh:true,
+      onUpdate(self){
+        /* אותה עקומת האטה כמו במקור */
+        hero.style.setProperty('--progress', gsap.parseEase('power1.inOut')(self.progress));
+      }
+    }
+  });
+
+  tl.to(tiles, { z:'100vh', duration:1, ease:'power1.inOut',
+                 stagger:{ amount:.2, from:'center' } })
+    .to(fronts, { scale:1, duration:1, ease:'power1.inOut', delay:.1 }, .6)
+    .to(fronts, { filter:'blur(0px)', duration:1, ease:'power1.inOut', delay:.4,
+                  stagger:{ amount:.2, from:'end' } }, .6);
+
+  /* הפעלת וידאו ההירו רק כשהוא נראה */
+  const hv = hero.querySelector('[data-hero-video]');
+  if (hv){
+    ScrollTrigger.create({
+      trigger: hero, start:'top bottom', end:'bottom top',
+      onToggle: s => s.isActive ? hv.play().catch(()=>{}) : hv.pause()
+    });
+  }
+}
+
+/* ============================================================
+   6. שואוקייס — Animmaster · Scroll Animation/16 (sticky-grid-scroll)
+   עמודות נכנסות לסירוגין מלמעלה/מטה, ואז זום 2.05
+   עם עמודות צד שנפרשות ועמודה מרכזית שנפתחת אנכית.
+   ============================================================ */
+function initShowcase(){
+  const sec   = document.querySelector('.showcase');
+  const grid  = sec.querySelector('.showcase__grid');
+  const items = [...sec.querySelectorAll('.showcase__item')];
+  const cap   = sec.querySelector('.showcase__cap');
+  const capP  = cap.querySelector('p');
+
+  /* קיבוץ ל-3 עמודות, בדיוק כמו במקור */
+  const cols = [[],[],[]];
+  items.forEach((it,i) => cols[i % 3].push(it));
+
+  const wh = window.innerHeight;
+  const dy = wh - (wh - grid.offsetHeight) / 2;
+
+  const tl = gsap.timeline({
+    scrollTrigger:{
+      trigger: sec, start:'top top', end:'bottom bottom',
+      scrub:.6, invalidateOnRefresh:true
+    }
+  });
+
+  /* חשיפה — עמודה זוגית מלמעלה, אי-זוגית מלמטה */
+  cols.forEach((col,ci) => {
+    const fromTop = ci % 2 === 0;
+    tl.from(col, {
+      y: dy * (fromTop ? -1 : 1),
+      stagger:{ each:.06, from: fromTop ? 'end' : 'start' },
+      ease:'power1.inOut'
+    }, 'reveal');
+  });
+
+  /* זום */
+  const zoom = gsap.timeline({ defaults:{ duration:1, ease:'power3.inOut' } })
+    .to(grid,    { scale:2.05 })
+    .to(cols[0], { xPercent:-40 }, '<')
+    .to(cols[2], { xPercent: 40 }, '<')
+    .to(cols[1], {
+      yPercent: i => (i < Math.floor(cols[1].length/2) ? -1 : 1) * 40,
+      duration:.5, ease:'power1.inOut'
+    }, '-=0.5');
+
+  tl.add(zoom, '-=0.6')
+    .to(capP, { opacity:1, duration:.4 }, '-=0.4');
+}
+
+/* ============================================================
+   7. חשיפות משניות
+   ============================================================ */
+function initReveals(){
+  /* מסכות שורה בכותרות */
+  gsap.utils.toArray('.sec-title').forEach(t => {
+    gsap.from(t.querySelectorAll('.hl > span'), {
+      yPercent:112, duration:1.05, stagger:.1, ease:'power4.out',
+      scrollTrigger:{ trigger:t, start:'top 86%' }
+    });
+  });
+
+  gsap.utils.toArray('[data-reveal]').forEach(el => {
+    gsap.to(el, {
+      opacity:1, y:0, duration:.95, ease:'power3.out',
+      scrollTrigger:{ trigger:el, start:'top 90%' }
+    });
+  });
+
+  /* מונים */
+  gsap.utils.toArray('[data-count]').forEach(el => {
+    const end = parseFloat(el.dataset.count);
+    const dec = parseInt(el.dataset.dec || '0', 10);
+    const pre = el.dataset.pre || '';
+    const o = { v:0 };
+    gsap.to(o, {
+      v:end, duration:1.5, ease:'power2.out',
+      scrollTrigger:{ trigger:el, start:'top 92%' },
+      onUpdate(){ el.textContent = pre + o.v.toFixed(dec); }
+    });
+  });
+
+  /* עמודות בנצ'מרק */
+  gsap.utils.toArray('[data-bar]').forEach(el => {
+    gsap.to(el, {
+      width: el.dataset.bar + '%', duration:1.3, ease:'power3.out',
+      scrollTrigger:{ trigger:el, start:'top 92%' }
+    });
+  });
+}
+
+/* ============================================================
+   8. וידאו — ניגון רק כשנראה (8 קבצים, חובה)
+   ============================================================ */
+function initVideos(){
+  const vids = document.querySelectorAll('video[data-autoplay]');
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      const v = e.target;
+      if (e.isIntersecting){
+        if (v.preload === 'none') v.preload = 'auto';
+        v.play().catch(()=>{});
+      } else {
+        v.pause();
+      }
+    });
+  }, { threshold:.25 });
+  vids.forEach(v => io.observe(v));
+}
+
+/* ============================================================
+   9. כפתור העתקה
+   ============================================================ */
+document.querySelectorAll('[data-copy]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const pre = btn.closest('.code').querySelector('pre');
+    navigator.clipboard.writeText(pre.innerText).then(() => {
+      const lang = document.documentElement.lang;
+      const old  = btn.textContent;
+      btn.textContent = lang === 'he' ? 'הועתק' : 'Copied';
+      setTimeout(() => { btn.textContent = old; }, 1600);
+    }).catch(()=>{});
+  });
+});
+
+/* ============================================================
+   10. עוגנים + הפעלה
+   ============================================================ */
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const t = document.querySelector(a.getAttribute('href'));
+    if (t){ e.preventDefault(); lenis.scrollTo(t, { offset:-60 }); }
+  });
+});
+
+window.addEventListener('load', () => {
+  /* אם GSAP או Lenis לא נטענו — מציגים הכול סטטית ויוצאים */
+  if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined'){
+    failSafe();
+    return;
+  }
+  bootPreloader();
+  initHero();
+  initShowcase();
+  initReveals();
+  initVideos();
+  ScrollTrigger.refresh();
+});
+
+let rt;
+window.addEventListener('resize', () => {
+  clearTimeout(rt);
+  rt = setTimeout(() => ScrollTrigger.refresh(), 220);
+});
+</script>
+</body>
+</html>
