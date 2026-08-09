@@ -106,6 +106,80 @@ td:first-child{color:var(--cream)}
 footer{border-top:1px solid var(--line);padding:28px var(--pad);text-align:center;color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase}
 @media(prefers-contrast:more){:root{--muted:#c9c9c2;--line:rgba(255,255,255,.36)}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+/* ============================================================
+   20. ווידג'ט נגישות
+   נבנה מקומית ולא דרך שירות חיצוני — כדי שלא יישבר ה-CSP,
+   לא ייטען סקריפט של צד שלישי, ולא יעקבו אחרי הגולשים.
+   ============================================================ */
+.a11y-btn{
+  position:fixed;inset-block-end:20px;inset-inline-start:20px;z-index:200;
+  width:52px;height:52px;border-radius:50%;border:2px solid #0a0a0a;
+  background:var(--accent);color:#0a0a0a;cursor:pointer;
+  display:grid;place-items:center;box-shadow:0 6px 22px rgba(0,0,0,.55);
+  transition:transform .25s;padding:0;
+}
+.a11y-btn:hover{transform:scale(1.08)}
+.a11y-btn svg{width:28px;height:28px;display:block}
+
+.a11y-panel{
+  position:fixed;inset-block-end:84px;inset-inline-start:20px;z-index:201;
+  width:min(310px,calc(100vw - 40px));
+  background:#141414;border:1px solid var(--line);border-radius:6px;
+  padding:18px;box-shadow:0 16px 50px rgba(0,0,0,.7);
+  display:none;max-height:min(74vh,560px);overflow-y:auto;
+}
+.a11y-panel[data-open]{display:block}
+.a11y-panel h2{
+  font-size:15px;font-weight:800;margin-bottom:4px;color:var(--cream);
+}
+.a11y-panel .a11y-sub{font-size:12px;color:var(--muted);margin-bottom:14px;line-height:1.5}
+.a11y-opt{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  width:100%;background:none;border:1px solid var(--line);border-radius:4px;
+  color:var(--cream);font-family:inherit;font-size:13.5px;text-align:start;
+  padding:10px 12px;margin-bottom:7px;cursor:pointer;transition:.2s;
+}
+.a11y-opt:hover{border-color:var(--accent)}
+.a11y-opt[aria-pressed=true]{background:var(--accent);color:#0a0a0a;border-color:var(--accent);font-weight:600}
+.a11y-opt i{font-style:normal;font-family:'JetBrains Mono',monospace;font-size:11px;opacity:.7}
+.a11y-reset{
+  width:100%;margin-top:8px;padding:10px;border:1px solid var(--line);
+  background:none;color:var(--muted);font-family:inherit;font-size:12.5px;
+  cursor:pointer;border-radius:4px;
+}
+.a11y-reset:hover{color:var(--cream);border-color:var(--cream)}
+.a11y-panel .a11y-link{
+  display:block;margin-top:12px;padding-top:12px;border-top:1px solid var(--line);
+  font-size:12.5px;color:var(--accent);text-decoration:underline;text-underline-offset:3px;
+}
+
+/* --- מצבי הנגישות --- */
+html.a11y-contrast{--muted:#ffffff;--cream:#ffffff;--line:rgba(255,255,255,.6);--bg:#000;--bg-2:#000}
+html.a11y-contrast .lead,html.a11y-contrast p,html.a11y-contrast td{color:#fff}
+html.a11y-contrast .outline{-webkit-text-stroke:1px #fff;color:transparent}
+
+html.a11y-links a:not(.btn):not(.a11y-opt){
+  text-decoration:underline!important;text-underline-offset:3px;
+  outline:1px dashed var(--accent);outline-offset:2px;
+}
+html.a11y-readable *:not(code):not(pre):not(.mono){
+  font-family:Arial,Helvetica,sans-serif!important;letter-spacing:normal!important;
+}
+html.a11y-nomotion *{
+  animation:none!important;transition:none!important;
+}
+html.a11y-nomotion [data-reveal],html.a11y-nomotion [data-fade]{opacity:1!important;transform:none!important}
+html.a11y-cursor,html.a11y-cursor *{
+  cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Cpath d='M8 4 L8 38 L16 30 L22 44 L28 41 L22 28 L34 28 Z' fill='%23fff' stroke='%23000' stroke-width='2'/%3E%3C/svg%3E") 4 4,auto!important;
+}
+html.a11y-zoom-1 body{zoom:1.15}
+html.a11y-zoom-2 body{zoom:1.3}
+@media(max-width:640px){
+  .a11y-btn{width:46px;height:46px;inset-block-end:14px;inset-inline-start:14px}
+  .a11y-panel{inset-block-end:70px;inset-inline-start:14px}
+}
+@media print{.a11y-btn,.a11y-panel{display:none!important}}
+
 </style>
 </head>
 <body>
@@ -127,7 +201,7 @@ footer{border-top:1px solid var(--line);padding:28px var(--pad);text-align:cente
 
   <h1 data-en="Legal, privacy &amp; credits" data-he="משפטי, פרטיות וקרדיטים">Legal, privacy &amp; credits</h1>
   <p class="sub" data-en="Everything about who made this, what it collects, where the material came from, and how to get something removed." data-he="כל מה שקשור למי יצר את זה, מה נאסף, מאיפה הגיע החומר, ואיך לבקש הסרה.">Everything about who made this, what it collects, where the material came from, and how to get something removed.</p>
-  <span class="updated" data-en="Last updated: 9 August 2026" data-he="עודכן לאחרונה: 9 באוגוסט 2026">Last updated: 9 August 2026</span>
+  <span class="updated" data-en="Last updated: 9 August 2026 · conforms to WCAG 2.1 AA and IS 5568" data-he="עודכן לאחרונה: 9 באוגוסט 2026 · תואם WCAG 2.1 AA ות״י 5568">Last updated: 9 August 2026</span>
 
   <nav class="toc" aria-label="Contents">
     <h2 data-en="Contents" data-he="תוכן העניינים">Contents</h2>
@@ -277,6 +351,9 @@ footer{border-top:1px solid var(--line);padding:28px var(--pad);text-align:cente
     <h2 class="s" data-en="06 · Accessibility statement" data-he="06 · הצהרת נגישות">06 · Accessibility statement</h2>
     <p data-en="This site aims to meet WCAG 2.1 Level AA, and in Israel to follow standard IS 5568. Accessibility was built in rather than added afterwards." data-he="האתר שואף לעמוד ב-WCAG 2.1 ברמה AA, ובישראל לפעול לפי תקן ישראלי 5568. הנגישות נבנתה לתוך האתר ולא נוספה בדיעבד.">This site aims to meet WCAG 2.1 Level AA, and in Israel to follow standard IS 5568.</p>
 
+    <h3 data-en="The accessibility menu" data-he="תפריט הנגישות">The accessibility menu</h3>
+    <p data-en="Every page carries an accessibility button in the bottom corner. It offers larger text (up to 130%), high contrast, highlighted links, a plain readable font, a large cursor, and a switch that stops every animation on the site. Your choices are saved on your device and nowhere else — the menu is built into the page itself, so no third-party script runs and nothing about you is sent anywhere." data-he="בכל עמוד יש כפתור נגישות בפינה התחתונה. הוא מציע הגדלת טקסט (עד 130%), ניגודיות גבוהה, הדגשת קישורים, גופן קריא פשוט, סמן גדול, ומתג שעוצר כל אנימציה באתר. הבחירות שלכם נשמרות במכשיר שלכם בלבד — התפריט בנוי בתוך העמוד עצמו, ולכן לא רץ שום סקריפט של צד שלישי ושום מידע עליכם לא נשלח לשום מקום.">Every page carries an accessibility button in the bottom corner, with larger text, high contrast, highlighted links, a readable font, a large cursor and a switch that stops every animation. Choices are saved on your device only.</p>
+
     <h3 data-en="What is in place" data-he="מה קיים">What is in place</h3>
     <ul>
       <li data-en="Full keyboard navigation, with a visible focus outline on every interactive element and a skip-to-content link as the first stop." data-he="ניווט מלא במקלדת, עם מסגרת מיקוד נראית בכל אלמנט אינטראקטיבי וקישור דילוג לתוכן כתחנה הראשונה.">Full keyboard navigation, visible focus outlines, and a skip-to-content link.</li>
@@ -299,6 +376,44 @@ footer{border-top:1px solid var(--line);padding:28px var(--pad);text-align:cente
 <footer>
   <span data-en="Unofficial field guide · not affiliated with MiniMax · demo clips © MiniMax" data-he="מדריך שדה לא רשמי · ללא שיוך ל-MiniMax · קטעי הדגמה © MiniMax">Unofficial field guide · not affiliated with MiniMax · demo clips © MiniMax</span>
 </footer>
+
+<!-- ========== ווידג'ט נגישות ========== -->
+<button class="a11y-btn" id="a11yBtn" type="button" aria-expanded="false" aria-controls="a11yPanel"
+        aria-label="אפשרויות נגישות / Accessibility options" title="נגישות / Accessibility">
+  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false">
+    <circle cx="12" cy="3.6" r="2.1"/>
+    <path d="M20.4 7.2c0 .7-.6 1.3-1.3 1.3l-4.4-.5v3.3l2.4 8.6a1.3 1.3 0 0 1-2.5.7L12 14.4l-2.6 6.2a1.3 1.3 0 0 1-2.5-.7L9.3 11.3V8L4.9 8.5a1.3 1.3 0 0 1 0-2.6l6-1a7 7 0 0 1 2.2 0l6 1c.7.1 1.3.6 1.3 1.3z"/>
+  </svg>
+</button>
+
+<div class="a11y-panel" id="a11yPanel" role="dialog" aria-modal="false"
+     aria-label="אפשרויות נגישות / Accessibility options">
+  <h2 data-en="Accessibility" data-he="נגישות">Accessibility</h2>
+  <p class="a11y-sub" data-en="These settings are saved on your device only." data-he="ההגדרות נשמרות במכשיר שלך בלבד.">These settings are saved on your device only.</p>
+
+  <button class="a11y-opt" type="button" data-a11y="zoom" aria-pressed="false">
+    <span data-en="Larger text" data-he="הגדלת טקסט">Larger text</span><i id="a11yZoomLvl">100%</i>
+  </button>
+  <button class="a11y-opt" type="button" data-a11y="contrast" aria-pressed="false">
+    <span data-en="High contrast" data-he="ניגודיות גבוהה">High contrast</span><i>◑</i>
+  </button>
+  <button class="a11y-opt" type="button" data-a11y="links" aria-pressed="false">
+    <span data-en="Highlight links" data-he="הדגשת קישורים">Highlight links</span><i>⎯</i>
+  </button>
+  <button class="a11y-opt" type="button" data-a11y="readable" aria-pressed="false">
+    <span data-en="Readable font" data-he="גופן קריא">Readable font</span><i>Aa</i>
+  </button>
+  <button class="a11y-opt" type="button" data-a11y="nomotion" aria-pressed="false">
+    <span data-en="Stop animations" data-he="עצירת אנימציות">Stop animations</span><i>⏸</i>
+  </button>
+  <button class="a11y-opt" type="button" data-a11y="cursor" aria-pressed="false">
+    <span data-en="Large cursor" data-he="סמן גדול">Large cursor</span><i>↖</i>
+  </button>
+
+  <button class="a11y-reset" type="button" id="a11yReset" data-en="Reset all" data-he="איפוס הכול">Reset all</button>
+  <a class="a11y-link" href="legal.html#a11y" data-en="Read the accessibility statement →" data-he="קרא את הצהרת הנגישות ←">Read the accessibility statement →</a>
+</div>
+
 
 <script>
 /* מתג שפה — זהה ל-index.html: החלפת טקסט על עלים בלבד, ואז כיוון המסמך */
@@ -324,6 +439,82 @@ btnHe.addEventListener('click',()=>applyLang('he'));
 let saved='en';
 try{saved=localStorage.getItem('h3lang')||'en';}catch(e){}
 if(saved==='he') applyLang('he');
+/* ============================================================
+   11. ווידג'ט נגישות
+   הכול מקומי: אין סקריפט חיצוני, אין מעקב, ההעדפות ב-localStorage.
+   ============================================================ */
+(function(){
+  const btn   = document.getElementById('a11yBtn');
+  const panel = document.getElementById('a11yPanel');
+  const root  = document.documentElement;
+  const KEY   = 'h3a11y';
+  let state = { zoom:0, contrast:false, links:false, readable:false, nomotion:false, cursor:false };
+
+  try { state = Object.assign(state, JSON.parse(localStorage.getItem(KEY) || '{}')); } catch(e){}
+
+  function apply(){
+    root.classList.toggle('a11y-contrast', state.contrast);
+    root.classList.toggle('a11y-links',    state.links);
+    root.classList.toggle('a11y-readable', state.readable);
+    root.classList.toggle('a11y-nomotion', state.nomotion);
+    root.classList.toggle('a11y-cursor',   state.cursor);
+    root.classList.toggle('a11y-zoom-1', state.zoom === 1);
+    root.classList.toggle('a11y-zoom-2', state.zoom === 2);
+
+    panel.querySelectorAll('[data-a11y]').forEach(b => {
+      const k = b.dataset.a11y;
+      b.setAttribute('aria-pressed', String(k === 'zoom' ? state.zoom > 0 : !!state[k]));
+    });
+    const lvl = document.getElementById('a11yZoomLvl');
+    if (lvl) lvl.textContent = ['100%','115%','130%'][state.zoom];
+
+    /* עצירת אנימציות באמת עוצרת את הסצנות, לא רק את ה-CSS */
+    if (typeof ScrollTrigger !== 'undefined'){
+      if (state.nomotion){
+        ScrollTrigger.getAll().forEach(t => { if (t.pin) t.disable(false); });
+        document.querySelectorAll('[data-reveal],[data-fade]').forEach(el => {
+          el.style.opacity = '1'; el.style.transform = 'none';
+        });
+        document.querySelectorAll('video').forEach(v => v.pause());
+      }
+      /* הזום משנה מידות — צריך למדוד מחדש */
+      requestAnimationFrame(() => ScrollTrigger.refresh());
+    }
+    try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e){}
+  }
+
+  function open(o){
+    panel.toggleAttribute('data-open', o);
+    btn.setAttribute('aria-expanded', String(o));
+    if (o) panel.querySelector('.a11y-opt').focus();
+  }
+
+  btn.addEventListener('click', () => open(!panel.hasAttribute('data-open')));
+
+  panel.querySelectorAll('[data-a11y]').forEach(b => {
+    b.addEventListener('click', () => {
+      const k = b.dataset.a11y;
+      if (k === 'zoom') state.zoom = (state.zoom + 1) % 3;
+      else state[k] = !state[k];
+      apply();
+    });
+  });
+
+  document.getElementById('a11yReset').addEventListener('click', () => {
+    state = { zoom:0, contrast:false, links:false, readable:false, nomotion:false, cursor:false };
+    apply();
+    if (typeof ScrollTrigger !== 'undefined') location.reload();
+  });
+
+  /* Esc סוגר, וקליק בחוץ סוגר */
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && panel.hasAttribute('data-open')) { open(false); btn.focus(); } });
+  document.addEventListener('click', e => {
+    if (panel.hasAttribute('data-open') && !panel.contains(e.target) && !btn.contains(e.target)) open(false);
+  });
+
+  apply();
+})();
+
 </script>
 </body>
 </html>
