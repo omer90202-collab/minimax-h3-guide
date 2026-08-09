@@ -39,7 +39,7 @@ Claude, Codex, Cursor or any agent that reads project files. Describe a shot in 
 returns a structured, paste-ready H3 prompt with every reference assigned, identities locked, beats
 timed and failure modes pre-empted, plus what the generation will cost.
 
-It contains the method, seven blueprints covering every shot type, a symptom-to-fix troubleshooting
+It contains the method, eight blueprints covering every shot type, a symptom-to-fix troubleshooting
 table, and verified specs so it never invents a number. MIT licensed, free to share.
 
 ## Tech

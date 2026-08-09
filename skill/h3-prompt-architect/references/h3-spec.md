@@ -1,5 +1,7 @@
 # MiniMax H3 — capability spec
 
+_Figures current as of 2026-08-09. Pricing and moderation behaviour drift; re-check before relying on them._
+
 Fallback reference. **If the interface or MCP tool you are calling reports its own limits, those
 win.** A client may enforce a stricter prompt ceiling or duration set than the provider does. Never
 raise a runtime limit to match this file, and never renumber a binding the interface gave you.
@@ -8,9 +10,9 @@ raise a runtime limit to match this file, and never renumber a binding the inter
 
 ## Output
 
-| | |
+| Spec | Value |
 |---|---|
-| Duration | 4–15 seconds, whole seconds |
+| Duration | 4–15 seconds; the interface takes whole seconds |
 | Frame rate | 24 fps |
 | Audio | Native stereo, generated in the same pass as the picture |
 | Resolutions | 768p · 2K · 4K |
@@ -18,9 +20,10 @@ raise a runtime limit to match this file, and never renumber a binding the inter
 | Prompt ceiling | 7,000 characters |
 | Languages | 11 stable: Arabic, Chinese, English, French, German, Italian, Japanese, Korean, Portuguese, Russian, Spanish |
 
-**Verified, not quoted.** The official demo files were inspected directly: every H3 clip is 24 fps
-with **32,000 Hz stereo AAC**, at 2560×1440 (16:9), 2944×1248 (21:9) or 1440×2560 (9:16). "2K" means
-a 1440px short edge, so a 21:9 frame is wider than 2560.
+**Measured, not quoted.** The official demo files were inspected directly: 24 fps and **32,000 Hz
+stereo AAC** on every clip, at 2560×1440 (16:9), 1440×2560 (9:16) or 2944×1248 (21:9). "2K" means a
+1440px short edge from 16:9 through 9:16; the 21:9 output holds roughly the same pixel budget
+(2944×1248 ≈ 3.67 MP vs 3.69 MP) by trading height for width, so its short edge is smaller.
 
 **Multi-shot is native.** A single generation can contain real cuts. You do not need to stitch
 separate clips to get coverage — that is what the timed shot list is for.
@@ -46,7 +49,7 @@ Two things worth telling users:
 
 ### Reference mode (Omni)
 
-| | |
+| Input | Limit |
 |---|---|
 | Images | up to 9 |
 | Videos | up to 3, each 2–15s, 15s total |
@@ -74,12 +77,17 @@ API request body caps at 64 MB — prefer URL-based media over inline uploads.
 
 ## Token syntax
 
+MiniMax's own published examples use spaced labels numbered in **attachment order across all
+types** — a video attached first, an image second and audio third become:
+
 ```text
-Image1   Image2   Video1   Audio1
+Video 1   Image 2   Audio 3
 ```
 
-No `@` prefix. No space before the number. Numbered in upload order. If the interface displays a
-different exact token, use theirs. Never infer a token from a filename, a UUID or a library label.
+Compact per-type tokens (`Image1`, `Video1`, `Audio1`) also bind correctly and appear in community
+guides. What matters is that the number matches the attachment position the interface shows you.
+Never use an `@` prefix. If the interface displays a different exact token, use theirs. Never infer
+a token from a filename, a UUID or a library label.
 
 Roles each reference type can credibly carry:
 
@@ -102,7 +110,23 @@ once is when the user actually wants that entire asset recreated.
 | Hailuo AI | Trying it, no code | MiniMax's own app, full feature set |
 | MiniMax API | Volume | Model ID `MiniMax-H3`, direct rates, pay-as-you-go |
 | fal.ai | Developers | Three endpoints: text-to-video, image-to-video, reference-to-video |
-| Open weights | Self-hosting | 33B on Hugging Face; caps at 768p, and the licence excludes local deployment in the US, EU, UK and South Korea |
+| Open weights | Self-hosting | 33B on Hugging Face; caps at 768p |
+
+The community licence excludes local deployment in the US, EU, UK and South Korea, requires visible
+"MiniMax H3" attribution in products built on it, and needs separate written authorisation for
+companies above $20M annual revenue. None of that applies to using the hosted API.
+
+### Which route runs which shot type
+
+| Shot type | Where it runs |
+|---|---|
+| 0 Text only | Hailuo text-to-video · fal `text-to-video` |
+| 1 Reference scene · 2 Motion · 3 Voice · 7 Product | Hailuo **Omni Reference** · fal `reference-to-video` |
+| 4 First/last frame | Hailuo **First/Last Frame** · fal `image-to-video` |
+| 5 Targeted edit · 6 Environment/VFX | Hailuo Omni Reference with the source clip as a video reference |
+
+There is no separate "edit" endpoint. An edit is a reference-to-video generation where the source
+clip is the master reference — which is why it costs full rate and produces a new file.
 
 ---
 

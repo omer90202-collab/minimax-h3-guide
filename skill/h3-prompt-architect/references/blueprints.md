@@ -1,7 +1,47 @@
 # Blueprints
 
-One pattern per shot type. Mix them freely — most real briefs are hybrids. Replace every `<placeholder>` with a fact from the user's brief —
+One pattern per shot type, numbered to match the table in `SKILL.md`. Mix them freely — most
+real briefs are hybrids.
+
+**These templates number tokens per type for readability. Renumber them to the actual attachment
+order before use** — a video attached first is `Video 1` even when an image is the first image. Replace every `<placeholder>` with a fact from the user's brief —
 never leave a placeholder in a returned prompt. Trim any section the shot does not need.
+
+---
+
+## 0. Text only — no references
+
+Nothing uploaded. You are the sole source of identity, so be specific enough that it cannot drift.
+
+```text
+[SCENE]
+<Location, time of day, weather, era.> <What the subject wants, and what is in the way.>
+
+[SUBJECTS]
+Exactly <n> people. <Age, build, hair, wardrobe and one distinguishing detail each.>
+Hold every one of those details identically from the first frame to the last.
+
+[SHOT LIST]
+<Timed beats, or natural prose for one continuous action.>
+
+[ACTING]
+<Observable behaviour — posture, gaze, breath, what they do while listening.>
+
+[LIGHT AND IMAGE]
+<Key light direction and quality, palette, contrast, lens character, depth of field.>
+
+[CAMERA]
+<One primary move, motivated by the action.>
+
+[PRODUCTION SOUND]
+Native stereo <ambience>. <Motivated effects tied to visible events.> <Music rule.>
+
+[NEGATIVES]
+No extra people, no face or wardrobe drift, no subtitles, no watermark, no unmotivated cuts.
+```
+
+With no reference to anchor to, identity drift is the main risk — which is why `[SUBJECTS]` carries
+the "identically from first to last" clause that a reference scene gets from its images.
 
 ---
 
@@ -11,9 +51,9 @@ The workhorse. Use when images define who the people are and where they are.
 
 ```text
 [REFERENCE USE]
-Image1 defines <A>'s face, hair, body and wardrobe only. Do not inherit its background or pose.
-Image2 defines <B>'s face, hair, body and wardrobe only. Do not inherit its background or pose.
-Image3 defines the location, layout, materials and lighting only. Do not inherit any people in it.
+Image 1 defines <A>'s face, hair, body and wardrobe only. Do not inherit its background or pose.
+Image 2 defines <B>'s face, hair, body and wardrobe only. Do not inherit its background or pose.
+Image 3 defines the location, layout, materials and lighting only. Do not inherit any people in it.
 
 [IDENTITY LOCKS]
 Exactly two people appear in this clip. Preserve each face, hairline, body proportion and outfit
@@ -31,18 +71,7 @@ The scene turns from <opening emotion> to <closing emotion>.
 <A> stands frame-left, <B> frame-right. Hold that axis and keep eyelines matched throughout.
 
 [SHOT LIST]
-Pick ONE of the two forms below and delete the other. Scale the timings to the requested duration.
-
---- multi-shot (H3 cuts natively; each cut needs a motivation) ---
-0–5s — <framing>; <camera>; <A> <action> and delivers the first line; cut motivated by <reason>.
-5–10s — tighter <framing>; <B> <reaction/escalation> and the second line; cut motivated by <reason>.
-10–15s — <framing>; <resolution action>; camera settles; hold <final tableau> with a sound tail.
-
---- single take (no cuts; framing changes come only from camera movement) ---
-One continuous take. Every change of framing comes from the camera move, never from an edit.
-0–5s — <opening framing>; <camera behaviour begins>; <action and first line>; end on <visible state>.
-5–10s — the move has tightened to <framing>; <reaction and second line>; end on <visible state>.
-10–15s — the move arrives at <framing>; <resolution>; camera settles; hold with a sound tail.
+<Use one of the two shot-list forms shown below this block. Scale the timings to the duration.>
 
 [ACTING]
 <Posture, breath, where each character looks, what they do while listening, how attention shifts.>
@@ -62,6 +91,23 @@ No third person, no face drift, no wardrobe change, no voice swap, no broken eye
 no duplicate props, no subtitles, no unmotivated cuts.
 ```
 
+**Shot-list form A — multi-shot.** H3 cuts natively, so every cut needs a motivation.
+
+```text
+0–5s — <framing>; <camera>; <A> <action> and delivers the first line; cut motivated by <reason>.
+5–10s — tighter <framing>; <B> <reaction/escalation> and the second line; cut motivated by <reason>.
+10–15s — <framing>; <resolution action>; camera settles; hold <final tableau> with a sound tail.
+```
+
+**Shot-list form B — single take.** Framing changes come only from camera movement.
+
+```text
+One continuous take. Every change of framing comes from the camera move, never from an edit.
+0–5s — <opening framing>; <camera behaviour begins>; <action and first line>; end on <visible state>.
+5–10s — the move has tightened to <framing>; <reaction and second line>; end on <visible state>.
+10–15s — the move arrives at <framing>; <resolution>; camera settles; hold with a sound tail.
+```
+
 ---
 
 ## 2. Motion and camera transfer
@@ -72,12 +118,12 @@ The whole job is separating what you're taking from what you're rejecting. Be bl
 
 ```text
 [REFERENCE USE]
-Image1 defines <A>'s identity and wardrobe only.
-Video1 defines body motion, gesture timing, interaction rhythm and camera movement only.
-Reject everything else from Video1: its actors, faces, clothing, location and lighting.
+Image 1 defines <A>'s identity and wardrobe only. Do not inherit its background, pose, framing or lighting.
+Video 1 defines body motion, gesture timing, interaction rhythm and camera movement only.
+Reject everything else from Video 1: its actors, faces, clothing, location and lighting.
 
 [TRANSFER]
-Reproduce the full action order and camera behaviour of Video1 performed by <A> in <target scene>.
+Reproduce the full action order and camera behaviour of Video 1 performed by <A> in <target scene>.
 Preserve every pause, direction change, contact, handoff, occlusion and final position.
 
 [CONTINUITY]
@@ -88,21 +134,21 @@ Weight, contact, hair movement, fabric and shadow must read as physically real i
 Native stereo ambience for <target scene> with synchronised action effects. <Dialogue/music rule.>
 
 [NEGATIVES]
-No actor leakage from Video1, no identity swap, no missing beats, no added cuts, no mirrored
+No actor leakage from Video 1, no identity swap, no missing beats, no added cuts, no mirrored
 screen direction.
 ```
 
 **Two things to check on the reference clip before spending:**
 
-*Length.* If Video1's move is much shorter than your target duration, H3 stretches it — a 4-second
+*Length.* If Video 1's move is much shorter than your target duration, H3 stretches it — a 4-second
 push-in spread across 12 seconds slows roughly 3×. Usually fine for a push-in, sludgy for anything
 faster. If the lengths are far apart, either match the clip length or say so explicitly:
-`Spread Video1's move evenly across the full <n> seconds.`
+`Spread Video 1's move evenly across the full <n> seconds.`
 
-*Cuts.* Video1's edit is part of its motion. If it contains a cut and your prompt also says
+*Cuts.* Video 1's edit is part of its motion. If it contains a cut and your prompt also says
 "no cuts", you have written a contradiction and the result will look strange for no obvious reason.
 Trim the reference to one continuous move, or take the edit rhythm deliberately:
-`Video1 also defines the cut rhythm — reproduce its <n> cuts at the same beats.`
+`Video 1 also defines the cut rhythm — reproduce its <n> cuts at the same beats.`
 
 ---
 
@@ -115,13 +161,18 @@ reference supplies the voice, and how the mix behaves.
 
 ```text
 [REFERENCE USE]
-Video1 defines the character on screen, the performance, the scene, the camera and the duration.
-Audio1 defines only <A>'s voice timbre, accent, cadence and emotional delivery.
-Do not inherit Audio1's words, background noise or music.
+Video 1 defines the character on screen, the performance, the scene, the camera and the duration.
+Do not inherit its spoken words — the dialogue below replaces them entirely.
+Audio 1 defines only <A>'s voice timbre, accent, cadence and emotional delivery.
+Do not inherit Audio 1's words, background noise or music.
 
 [DIALOGUE]
 <A> says exactly, in <language and accent>: "<exact line>"
 Delivery: <pace, volume, breath, restraint, where the emphasis lands>.
+
+[IDENTITY LOCKS]
+Exactly one person speaks and appears on camera, unchanged from Video 1. No second speaker, no
+extra person in frame.
 
 [SYNC AND MIX]
 Lip sync must match the spoken line precisely. Keep the same face and identity throughout.
@@ -139,14 +190,17 @@ Use when two images are the exact boundaries and H3 fills the middle.
 
 ```text
 [BOUNDARY FRAMES]
-Image1 is the exact first frame. Hold its subject count, identity, wardrobe, composition,
+Image 1 is the exact first frame. Hold its subject count, identity, wardrobe, composition,
 lighting and object positions at the start.
-Image2 is the exact last frame. By the end, the shot should have travelled naturally into that
+Image 2 is the exact last frame. By the end, the shot should have travelled naturally into that
 composition, that light and those object positions.
+
+[IDENTITY LOCKS]
+Exactly <n> people and the same objects throughout, as shown in the boundary frames.
+Nothing enters frame and nothing leaves.
 
 [ACTION]
 In one continuous causal motion, <the smallest plausible action connecting the two frames>.
-The same subjects and objects persist throughout — nothing enters or leaves.
 
 [CAMERA AND SOUND]
 <Single camera behaviour.> Native stereo <ambience and motivated effects>.
@@ -155,6 +209,11 @@ The same subjects and objects persist throughout — nothing enters or leaves.
 No cut, no teleporting, no duplicate subject, no identity change, no prop swap,
 no discontinuous lighting.
 ```
+
+**With one image only.** `Image 1` is the exact first frame and there is no end-frame constraint.
+Drop `[BOUNDARY FRAMES]`'s second line, describe the single continuous action and the camera
+behaviour that carries it, and lock identity and subject count explicitly — with no second frame,
+drift has nothing to land on.
 
 ---
 
@@ -166,11 +225,11 @@ The `[PRESERVE]` block is the important one. Without it H3 treats the whole clip
 
 ```text
 [SOURCE MASTER]
-Treat Video1 as the only source of truth — its people, their performance, the setting, the running
+Treat Video 1 as the only source of truth — its people, their performance, the setting, the running
 order of events, the camera, what overlaps what, the dialogue and the room tone all stand as-is.
 
 [REFERENCE USE]
-Image1 defines only <replacement>'s appearance, structure, material and colour.
+Image 1 defines only <replacement>'s appearance, structure, material and colour.
 Do not inherit its background, scale or pose.
 
 [EDIT]
@@ -178,10 +237,35 @@ Swap <target> for <replacement>, and only that. One instance, never two.
 Wherever the original travelled, touched, passed behind something, turned, grew, sped up or
 dropped out of frame, the replacement does the same.
 
+[IDENTITY LOCKS]
+Exactly <n> people, unchanged from Video 1. No new subject enters and none leaves.
+
 [PRESERVE]
 Change nothing else: no other subject, object, action, background, light, camera move, cut,
-line of dialogue, sound effect, ambience or the duration.
+line of dialogue, sound effect or ambience. The duration stays exactly as Video 1.
+
+[NEGATIVES]
+No identity drift, no second instance of the edited element, no reframing, no added or removed
+cuts, no change to anything outside the named target, no subtitles.
 ```
+
+**Attribute-only edit — when there is no replacement reference.** If the change is a property of
+something already in the clip (colour, material, text, time of day), drop `[REFERENCE USE]` and
+write the edit as a property change:
+
+```text
+[EDIT]
+Change only <target>'s <property> to <exact new value — name the shade, finish and material, e.g.
+"deep crimson, matte wool, same weave and drape">. Everything about <target> otherwise stays as in
+Video 1 — same cut, same fit, same fold and shadow behaviour, same response to the existing light.
+```
+
+**What an "edit" actually is.** H3 does not modify the user's file. It generates a **new** clip of
+4–15 seconds that reproduces the source and applies the change. So they pay full rate again, and
+should expect small drift in face, framing and room tone. The source must also satisfy the
+reference caps — 15 seconds and 50 MB maximum. A longer source has to be trimmed first, and
+anything past 15 seconds cannot be produced in one generation at all. Say this before handing
+over the prompt.
 
 ---
 
@@ -191,14 +275,19 @@ Use to keep the performance and swap the world around it.
 
 ```text
 [SOURCE MASTER]
-Video1 defines foreground subjects, performance, motion, timing, camera and duration.
+Video 1 defines foreground subjects, performance, motion, timing, camera and duration.
+Do not inherit its background beyond the region being replaced.
 
 [REFERENCE USE]
-Image1 defines only the target environment, atmosphere and lighting style.
+Image 1 defines only the target environment, atmosphere and lighting style.
+Do not inherit any people, objects or camera framing from it.
 
 [EDIT]
 Replace <bounded background> with the target environment. Parallax, background motion, shadows,
 reflections and transmitted light must respond correctly to the foreground performance and camera.
+
+[IDENTITY LOCKS]
+Exactly <n> people, the same ones as in Video 1. No new figure appears in the replaced background.
 
 [PRESERVE]
 Identity, hair and fabric edges, foreground objects, gesture timing, scale, occlusions, camera
@@ -217,9 +306,9 @@ no speech. Use blueprint 1's spine but swap the human-shaped sections for these.
 
 ```text
 [REFERENCE USE]
-Image1 defines the product only — exact geometry, proportions, finish, label artwork, typography
+Image 1 defines the product only — exact geometry, proportions, finish, label artwork, typography
 and label placement. Do not inherit its background, surface, scale, lighting or camera angle.
-Image2 defines the hands only — skin tone, hand and finger shape, nails, jewellery.
+Image 2 defines the hands only — skin tone, hand and finger shape, nails, jewellery.
 Do not inherit its background, lighting, framing or pose.
 
 [IDENTITY LOCKS]
@@ -253,7 +342,7 @@ cheap structure test can confirm staging but tells you nothing about legibility.
 
 ---
 
-## Writing notes that apply to all seven
+## Writing notes that apply to all eight
 
 **Direct behaviour, not feelings.** "Anxious" gives H3 nothing to render. "Keeps glancing at the
 door, turns the ring on her finger, starts the sentence twice" gives it everything.

@@ -2,14 +2,14 @@
 
 **A skill that writes MiniMax H3 prompts for you.**
 
-H3 is the most controllable video model available right now — and the least forgiving of a lazy
-prompt. Upload three reference images without telling it who does what, and it averages them:
-faces drift, jackets change colour, a stranger appears in the background. Each mistake costs about
-$2 to discover.
+H3 gives you more control over identity, motion and sound than anything at its price — and punishes
+a lazy prompt harder. Upload three reference images without telling it who does what and it averages
+them: faces drift, jackets change colour, a stranger appears in the background. Each mistake costs
+about $2 to discover.
 
-This skill turns a sentence into a structured, paste-ready H3 prompt that lands on the first try.
-It knows the model's section order, the reference-token syntax, the timing budget, and the specific
-line to add when something comes out wrong.
+This skill turns a sentence into a structured, paste-ready H3 prompt that gets it right far more
+often on the first try. It knows the model's section order, the reference-token syntax, the timing
+budget, and the specific line to add when something comes out wrong.
 
 ---
 
@@ -25,9 +25,9 @@ locked, geography set, beats timed, sound specified, and the failure modes pre-e
 
 ```text
 [REFERENCE USE]
-Image1 defines Maya's face, hair and wardrobe only. Do not inherit its background or pose.
-Image2 defines Daniel's face, hair and wardrobe only. Do not inherit its background or pose.
-Video1 defines camera movement and pacing only. Reject its actors, clothing and location.
+Image 1 defines Maya's face, hair and wardrobe only. Do not inherit its background or pose.
+Image 2 defines Daniel's face, hair and wardrobe only. Do not inherit its background or pose.
+Video 3 defines camera movement and pacing only. Reject its actors, clothing and location.
 
 [IDENTITY LOCKS]
 Exactly two people. Preserve each face and outfit from first frame to last. No swaps.
@@ -54,7 +54,7 @@ reference-based video prompting. You can also call it directly with `/h3-prompt-
 
 ### Claude Desktop / claude.ai
 
-Settings → Capabilities → Skills → upload the folder (or the `.zip`).
+Settings → Capabilities → Skills → upload `h3-prompt-architect.zip`.
 
 ### Codex, Cursor, or any agent that reads project files
 
@@ -87,10 +87,12 @@ another $2 and usually produces a different wrong result.
 
 | File | What it's for |
 |---|---|
-| `SKILL.md` | The method — casting, section order, timing, validation |
-| `references/blueprints.md` | A filled-in pattern for each of the six shot types |
-| `references/h3-spec.md` | Verified limits, formats, pricing, token syntax |
+| `SKILL.md` | The method — the reference map, section order, timing, validation |
+| `references/blueprints.md` | A filled-in pattern for each of the eight shot types |
+| `references/h3-spec.md` | Limits, formats, pricing, token syntax, which route runs what |
 | `references/troubleshooting.md` | Symptom → cause → the exact line to add |
+| `agents/openai.yaml` | Display metadata for Codex-style agent runners |
+| `LICENSE` | MIT |
 
 ---
 
@@ -110,9 +112,14 @@ Everything else in this skill is machinery around that one idea.
 
 Built to accompany the [MiniMax H3 Field Guide](https://omer90202-collab.github.io/minimax-h3-guide/).
 
-Prompting technique here is derived from MiniMax's published documentation, community testing, and
-hands-on use. Capability figures were verified against the model's own output files rather than
-repeated from secondary sources.
+Prompting technique here is derived from MiniMax's published documentation and prompt examples,
+community guides, and hands-on use. The bracketed-section approach to H3 prompting is prior art —
+it appears in several community resources, notably PromptSama's `minimax-h3-reference-prompts`;
+this package is an independent write-up of the same underlying technique, with its own blueprints,
+troubleshooting and cost guidance.
+
+Resolution, frame rate and audio format were measured directly from MiniMax's official demo files.
+Limits, pricing and licence terms come from MiniMax's and fal's published documentation.
 
 Free to use and share. Not affiliated with MiniMax or Hailuo AI. The model's behaviour changes as
 it's updated — if something here stops matching reality, trust the model.
