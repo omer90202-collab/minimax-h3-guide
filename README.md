@@ -16,11 +16,10 @@ model MiniMax released on 31 July 2026, with open weights following on 3 August 
 |---|---|
 | Multimodal context | The one-prompt / three-modalities demo, with the original inputs and MiniMax's verbatim prompt |
 | Capabilities | Omni-reference, native audio, multi-shot, instruction editing, text & brand rendering, V2V motion, in-context 2K, aspect ratios |
-| Specs | Duration, frame rate, resolution, audio, languages, reference limits, architecture, VAE, API model ID |
 | Demos | Eight official demo clips with source resolutions and durations |
-| Benchmarks | Artificial Analysis Elo scores for video editing, text-to-video and image-to-video |
+| What you can make | Real brands, real public figures with voice and lip-sync, real dramatic tone |
 | Pricing | Per-second rates at 768p / 2K / 4K, plus reseller and billing gotchas |
-| Limits | What clears moderation, what is hard-blocked, and what is silently stripped |
+| How to start | The three routes in: Hailuo AI, the MiniMax API, fal.ai |
 | Prompting | The full H3 section architecture, the one-job/one-exclusion rule, timing, a worked example |
 | Free skill | **H3 Prompt Architect** — a downloadable skill that writes H3 prompts for you |
 
@@ -29,9 +28,7 @@ model MiniMax released on 31 July 2026, with open weights following on 3 August 
 Two claims here come from direct testing, not from a secondary source:
 
 - **Real public figures generate cleanly**, including a matching voice and accurate lip-sync. The
-  hard block is on studio-owned *characters* — a copyright line, not a likeness line. Disney,
-  Universal and Warner Bros. Discovery sued MiniMax over 30+ works, which is what that filter
-  is defending against.
+  one hard block is on studio-owned *characters* — a copyright line, not a likeness line.
 - **The audio spec is real.** Every H3 demo file was inspected directly with `ffmpeg`: all are
   24 fps with 32 kHz stereo AAC, at 2560×1440 (16:9), 2944×1248 (21:9) or 1440×2560 (9:16).
 
