@@ -526,6 +526,68 @@ html[dir=rtl] .hero__badge{left:auto;right:var(--pad)}
   font-family:'JetBrains Mono',monospace;font-size:12px;background:rgba(242,239,233,.06);
   padding:2px 6px;color:var(--cream);
 }
+/* ===== קופסת הסקיל ===== */
+.skillbox{border:1px solid var(--line);background:var(--bg);overflow:hidden}
+.skillbox__main{display:grid;grid-template-columns:1.35fr 1fr}
+@media(max-width:860px){.skillbox__main{grid-template-columns:1fr}}
+.skillbox__what{padding:clamp(24px,3.2vw,40px);border-inline-end:1px solid var(--line)}
+@media(max-width:860px){.skillbox__what{border-inline-end:0;border-bottom:1px solid var(--line)}}
+.skillbox__what h3{margin-bottom:18px}
+.ticks{list-style:none;display:grid;gap:12px}
+.ticks li{
+  position:relative;padding-inline-start:26px;font-size:14px;color:var(--muted);line-height:1.6;
+}
+/* וי — נבנה מגבול שמאלי + תחתון מסובב. border-inline-start כבר מתהפך
+   ב-RTL מעצמו, אז אסור להוסיף scaleX(-1) — זה יהפוך אותו פעמיים. */
+.ticks li::before{
+  content:"";position:absolute;inset-inline-start:2px;top:.5em;
+  width:9px;height:5px;border-inline-start:2px solid var(--accent);
+  border-bottom:2px solid var(--accent);transform:rotate(-45deg);
+}
+.skillbox__rule{padding:clamp(24px,3.2vw,40px);background:var(--bg-2);display:flex;flex-direction:column;justify-content:center}
+.skillbox__quote{
+  font-size:clamp(17px,2.1vw,22px);font-weight:700;line-height:1.35;
+  letter-spacing:-.01em;color:var(--cream);margin-bottom:14px;
+}
+.skillbox__sub{font-size:13.5px;color:var(--muted);line-height:1.62}
+.skillbox__cta{
+  display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+  padding:clamp(18px,2.4vw,26px) clamp(24px,3.2vw,40px);border-top:1px solid var(--line);
+}
+.btn{
+  display:inline-flex;align-items:center;gap:12px;
+  background:var(--accent);color:#fff;padding:14px 26px;
+  font-weight:700;font-size:14.5px;letter-spacing:.01em;
+  transition:transform .3s,filter .3s;
+}
+.btn:hover{transform:translateY(-2px);filter:brightness(1.1)}
+.btn em{font-style:normal;font-family:'JetBrains Mono',monospace}
+.btn--ghost{background:none;color:var(--cream);border:1px solid var(--line)}
+.btn--ghost:hover{border-color:var(--cream);filter:none}
+.skillbox__meta{
+  font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--muted);margin-inline-start:auto;
+}
+@media(max-width:640px){.skillbox__meta{margin-inline-start:0}}
+
+/* רשימת הסקשנים של מבנה הפרומפט */
+.blk-title{
+  font-size:clamp(17px,2vw,22px);font-weight:800;letter-spacing:-.01em;
+  margin:clamp(30px,4vw,46px) 0 14px;
+}
+.blocks{display:grid;gap:1px;background:var(--line);border:1px solid var(--line);margin-bottom:clamp(20px,2.6vw,32px)}
+.blk{
+  display:grid;grid-template-columns:minmax(160px,210px) 1fr;gap:clamp(10px,2vw,22px);
+  background:var(--bg-2);padding:13px clamp(12px,1.8vw,20px);align-items:baseline;
+}
+.blk code{
+  font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);
+  letter-spacing:.02em;white-space:nowrap;
+}
+.blk span{font-size:13.5px;color:var(--muted);line-height:1.55}
+@media(max-width:640px){
+  .blk{grid-template-columns:1fr;gap:4px}
+}
 /* הערה מעשית קטנה — לא כרטיס אזהרה */
 .softnote{
   margin-top:clamp(22px,3vw,34px);font-size:13.5px;line-height:1.7;color:var(--muted);
@@ -658,6 +720,7 @@ a:focus-visible,button:focus-visible,video:focus-visible,audio:focus-visible,[ta
     <a class="hlink" href="#make" data-en="What you can make" data-he="מה אפשר ליצור">What you can make</a>
     <a class="hlink" href="#pricing" data-en="Pricing" data-he="מחיר">Pricing</a>
     <a class="hlink" href="#prompting" data-en="Prompting" data-he="פרומפטים">Prompting</a>
+    <a class="hlink" href="#skill" data-en="Free skill" data-he="סקיל חינם">Free skill</a>
     <a class="hlink" href="#start" data-en="Start" data-he="להתחיל">Start</a>
     <div class="lang" role="group" aria-label="Language / שפה">
       <button id="btn-en" type="button" aria-pressed="true" lang="en" aria-label="Switch to English">EN</button>
@@ -1009,14 +1072,44 @@ a:focus-visible,button:focus-visible,video:focus-visible,audio:focus-visible,[ta
          data-he="הכלל הבודד הזה מתקן את רוב הפלטים הגרועים ב-H3. מכיוון שהוא קורא הכול כקונטקסט אחד, רפרנס עמום דולף למקומות שלא התכוונת אליהם. תן שם לכל אחד ואמור מה הוא שולט בו.">That single rule fixes most bad H3 output.</p>
     </div>
 
+    <p class="softnote" data-reveal style="margin-top:0;border-top:0;padding-top:0"
+       data-en="H3 reads text, images, video and audio as one merged context and tries to satisfy all of it at once. Give it three references without saying who does what and it averages them — faces drift, jackets change colour, a stranger appears. The structure below is what prevents that."
+       data-he="H3 קורא טקסט, תמונות, וידאו ואודיו כקונטקסט אחד ומנסה לספק את הכול בו-זמנית. תן לו שלושה רפרנסים בלי לומר מי עושה מה — והוא ימצע ביניהם: פנים נודדות, ז׳קט מחליף צבע, אדם זר מופיע. המבנה שלמטה הוא מה שמונע את זה.">H3 reads everything as one merged context. The structure below is what stops it averaging your references.</p>
+
+    <h3 class="blk-title" data-reveal data-en="The section order" data-he="סדר הסקשנים">The section order</h3>
+    <p class="softnote" data-reveal style="margin-top:0;border-top:0;padding-top:0"
+       data-en="Stable facts first, then action, then finishing. Facts stated before the action become constraints on it; stated after, they read as suggestions. Use only the sections your shot needs."
+       data-he="קודם עובדות יציבות, אחר כך פעולה, ולבסוף גימור. עובדה שנאמרת לפני הפעולה הופכת למגבלה עליה; אם היא נאמרת אחריה, היא נקראת כהצעה. השתמש רק בסקשנים שהשוט שלך צריך.">Stable facts first, then action, then finishing.</p>
+
+    <div class="blocks">
+      <div class="blk" data-reveal><code>[REFERENCE USE]</code><span data-en="What each file controls — and what it must not bring" data-he="במה כל קובץ שולט — ומה אסור לו להביא">What each file controls — and what it must not bring</span></div>
+      <div class="blk" data-reveal><code>[IDENTITY LOCKS]</code><span data-en="Subject count, faces, wardrobe, prop and voice ownership" data-he="מספר הדמויות, פנים, לבוש, בעלות על אביזרים וקול">Subject count, faces, wardrobe, prop and voice ownership</span></div>
+      <div class="blk" data-reveal><code>[SCENE]</code><span data-en="Location, what each character wants, the emotional turn" data-he="מיקום, מה כל דמות רוצה, נקודת המפנה הרגשית">Location, what each character wants, the emotional turn</span></div>
+      <div class="blk" data-reveal><code>[DIALOGUE]</code><span data-en="Exact quoted lines, one named speaker each" data-he="שורות מצוטטות מדויקות, דובר אחד מזוהה לכל שורה">Exact quoted lines, one named speaker each</span></div>
+      <div class="blk" data-reveal><code>[SCREEN GEOGRAPHY]</code><span data-en="Who is frame-left, who is frame-right, matching eyelines" data-he="מי משמאל הפריים, מי מימין, קווי מבט תואמים">Who is frame-left, who is frame-right, matching eyelines</span></div>
+      <div class="blk" data-reveal><code>[SHOT LIST]</code><span data-en="Timed beats — one primary event each" data-he="ביטים מתוזמנים — אירוע מרכזי אחד לכל אחד">Timed beats — one primary event each</span></div>
+      <div class="blk" data-reveal><code>[ACTING]</code><span data-en="Observable behaviour, never emotion labels" data-he="התנהגות נראית, אף פעם לא תוויות של רגש">Observable behaviour, never emotion labels</span></div>
+      <div class="blk" data-reveal><code>[LIGHT AND IMAGE]</code><span data-en="Lighting, palette, lens character, depth" data-he="תאורה, פלטה, אופי עדשה, עומק">Lighting, palette, lens character, depth</span></div>
+      <div class="blk" data-reveal><code>[CAMERA]</code><span data-en="Permitted moves and transitions — one owner only" data-he="תנועות ומעברים מותרים — בעלים אחד בלבד">Permitted moves and transitions — one owner only</span></div>
+      <div class="blk" data-reveal><code>[PRODUCTION SOUND]</code><span data-en="Ambience, effects, dialogue clarity, music policy" data-he="אווירה, אפקטים, בהירות דיאלוג, מדיניות מוזיקה">Ambience, effects, dialogue clarity, music policy</span></div>
+      <div class="blk" data-reveal><code>[NEGATIVES]</code><span data-en="The specific failures you are guarding against" data-he="הכשלים הספציפיים שאתה מגן מפניהם">The specific failures you are guarding against</span></div>
+    </div>
+
+    <h3 class="blk-title" data-reveal data-en="The rule that matters most" data-he="הכלל הכי חשוב">The rule that matters most</h3>
+    <div class="code" data-reveal style="margin-bottom:clamp(24px,3.2vw,38px)">
+      <div class="code__bar"><span data-en="Every reference gets one job — and one exclusion" data-he="לכל רפרנס תפקיד אחד — ושורת החרגה אחת">Every reference gets one job — and one exclusion</span></div>
+<pre><span class="k">Image1</span> defines Maya's face, hair and wardrobe <span class="k">only</span>.
+<span class="c">Do not inherit its background, pose, framing or lighting.</span></pre>
+    </div>
+    <p class="softnote" data-reveal style="margin-top:0;border-top:0;padding-top:0"
+       data-en="That second line is the one almost everyone skips, and it is the line that actually stops the leakage. Token syntax is strict: Image1, Image2, Video1, Audio1 — no @ symbol, no space before the number, numbered in upload order."
+       data-he="השורה השנייה היא זו שכמעט כולם מדלגים עליה, והיא זו שבאמת עוצרת את הדליפה. תחביר הטוקנים נוקשה: Image1, Image2, Video1, Audio1 — בלי @, בלי רווח לפני המספר, ממוספר לפי סדר ההעלאה.">That second line is what actually stops the leakage.</p>
+
+    <h3 class="blk-title" data-reveal data-en="Timing the beats" data-he="תזמון הביטים">Timing the beats</h3>
     <div class="formula">
-      <div class="fstep" data-reveal><b>01</b><span data-en="Visual direction — style, lighting, mood" data-he="כיוון ויזואלי — סגנון, תאורה, מצב רוח">Visual direction — style, lighting, mood</span></div>
-      <div class="fstep" data-reveal><b>02</b><span data-en="Reference roles — what each file controls" data-he="תפקידי רפרנס — במה כל קובץ שולט">Reference roles — what each file controls</span></div>
-      <div class="fstep" data-reveal><b>03</b><span data-en="Opening scene — where the clip begins" data-he="סצנת פתיחה — איפה הקליפ מתחיל">Opening scene — where the clip begins</span></div>
-      <div class="fstep" data-reveal><b>04</b><span data-en="Action — in chronological order" data-he="פעולה — בסדר כרונולוגי">Action — in chronological order</span></div>
-      <div class="fstep" data-reveal><b>05</b><span data-en="Camera — one main move per shot" data-he="מצלמה — תנועה מרכזית אחת לשוט">Camera — one main move per shot</span></div>
-      <div class="fstep" data-reveal><b>06</b><span data-en="Dialogue and sound — exact words" data-he="דיאלוג וסאונד — מילים מדויקות">Dialogue and sound — exact words</span></div>
-      <div class="fstep" data-reveal><b>07</b><span data-en="Ending — final pose or action" data-he="סיום — פוזה או פעולה אחרונה">Ending — final pose or action</span></div>
+      <div class="fstep" data-reveal><b>1/3</b><span data-en="Establish — who, where, the relationship, the first line" data-he="ביסוס — מי, איפה, מערכת היחסים, השורה הראשונה">Establish — who, where, the relationship, the first line</span></div>
+      <div class="fstep" data-reveal><b>2/3</b><span data-en="Escalate — closer framing, the interruption, the reaction" data-he="הסלמה — מסגור קרוב יותר, ההפרעה, התגובה">Escalate — closer framing, the interruption, the reaction</span></div>
+      <div class="fstep" data-reveal><b>3/3</b><span data-en="Resolve — the answer, the decisive action, camera settles" data-he="פתרון — התשובה, הפעולה המכריעה, המצלמה מתייצבת">Resolve — the answer, the decisive action, camera settles</span></div>
     </div>
 
     <div class="code" data-reveal>
@@ -1048,6 +1141,50 @@ End on a stable close view of her face and the cup.
       <div class="fstep" data-reveal><b>+</b><span data-en="Tie sound to something visible, not “cinematic audio”." data-he="קשר סאונד למשהו נראה, לא ל״אודיו קולנועי״.">Tie sound to something visible.</span></div>
       <div class="fstep" data-reveal><b>+</b><span data-en="One sentence of dialogue per 5 seconds of clip." data-he="משפט דיאלוג אחד לכל 5 שניות של קליפ.">One sentence of dialogue per 5 seconds.</span></div>
       <div class="fstep" data-reveal><b>+</b><span data-en="Start with one subject, one action, one camera move." data-he="התחל עם סובייקט אחד, פעולה אחת, תנועת מצלמה אחת.">Start with one subject, one action, one camera move.</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== הסקיל ========== -->
+<section class="sec" id="skill" style="background:var(--bg-2);border-block:1px solid var(--line)">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="kicker" data-en="Free download" data-he="הורדה חינם">Free download</div>
+      <h2 class="sec-title">
+        <span class="hl"><span data-en="Or let it write" data-he="או שתן לזה לכתוב">Or let it write</span></span>
+        <span class="hl"><span class="outline" data-en="the prompt for you." data-he="את הפרומפט בשבילך.">the prompt for you.</span></span>
+      </h2>
+      <p class="lead" data-reveal
+         data-en="H3 Prompt Architect is a skill for Claude, Codex or any AI agent. You describe the shot in a sentence; it returns a complete, structured, paste-ready H3 prompt — every reference assigned, identities locked, beats timed, failure modes pre-empted — plus what the generation will cost before you press the button."
+         data-he="H3 Prompt Architect הוא סקיל ל-Claude, ל-Codex או לכל סוכן AI. אתה מתאר את השוט במשפט אחד; הוא מחזיר פרומפט H3 מלא, מובנה ומוכן להדבקה — כל רפרנס מוקצה, זהויות נעולות, ביטים מתוזמנים, כשלים נמנעים מראש — ובנוסף כמה הג׳נרוט יעלה לך לפני שתלחץ.">You describe the shot in a sentence. It returns a complete, structured, paste-ready H3 prompt.</p>
+    </div>
+
+    <div class="skillbox" data-reveal>
+      <div class="skillbox__main">
+        <div class="skillbox__what">
+          <h3 data-en="What's inside" data-he="מה יש בפנים">What's inside</h3>
+          <ul class="ticks">
+            <li data-en="The full method — casting references, section order, timing, validation" data-he="השיטה המלאה — הקצאת רפרנסים, סדר סקשנים, תזמון, בדיקה">The full method — casting references, section order, timing, validation</li>
+            <li data-en="Seven ready blueprints: reference scenes, motion transfer, voice, first/last frame, edits, VFX, product" data-he="שבעה בלופרינטים מוכנים: סצנות רפרנס, העברת תנועה, קול, פריים ראשון/אחרון, עריכות, VFX, מוצר">Seven ready blueprints for every shot type</li>
+            <li data-en="A troubleshooting table — symptom, cause, and the exact line to add" data-he="טבלת פתרון תקלות — סימפטום, סיבה, והשורה המדויקת להוסיף">A troubleshooting table — symptom, cause, and the exact line to add</li>
+            <li data-en="Verified specs, limits and pricing so it never invents a number" data-he="מפרטים, מגבלות ותמחור מאומתים כדי שלא ימציא מספרים">Verified specs, limits and pricing so it never invents a number</li>
+          </ul>
+        </div>
+        <div class="skillbox__rule">
+          <span class="kicker" style="margin-bottom:14px" data-en="The one idea" data-he="הרעיון האחד">The one idea</span>
+          <p class="skillbox__quote" data-en="Every reference gets exactly one job — and one explicit thing it must not do." data-he="כל רפרנס מקבל תפקיד אחד בדיוק — ודבר אחד מפורש שאסור לו לעשות.">Every reference gets exactly one job — and one explicit thing it must not do.</p>
+          <p class="skillbox__sub" data-en="You are casting a crew, not uploading a mood board. A reference with no job description will volunteer for every job on set." data-he="אתה מאייש צוות, לא מעלה לוח השראה. רפרנס בלי הגדרת תפקיד יתנדב לכל תפקיד בסט.">You are casting a crew, not uploading a mood board.</p>
+        </div>
+      </div>
+      <div class="skillbox__cta">
+        <a class="btn" href="skill/h3-prompt-architect.zip" download>
+          <span data-en="Download the skill" data-he="הורד את הסקיל">Download the skill</span><em>↓</em>
+        </a>
+        <a class="btn btn--ghost" href="skill/h3-prompt-architect/README.md">
+          <span data-en="Install guide" data-he="מדריך התקנה">Install guide</span><em>→</em>
+        </a>
+        <span class="skillbox__meta" data-en="19 KB · free · MIT · works in Claude, Codex, Cursor" data-he="19 KB · חינם · MIT · עובד ב-Claude, Codex, Cursor">19 KB · free · MIT · works in Claude, Codex, Cursor</span>
+      </div>
     </div>
   </div>
 </section>

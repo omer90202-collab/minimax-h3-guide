@@ -21,7 +21,8 @@ model MiniMax released on 31 July 2026, with open weights following on 3 August 
 | Benchmarks | Artificial Analysis Elo scores for video editing, text-to-video and image-to-video |
 | Pricing | Per-second rates at 768p / 2K / 4K, plus reseller and billing gotchas |
 | Limits | What clears moderation, what is hard-blocked, and what is silently stripped |
-| Prompting | The seven-part prompt formula, structured fields, reference and voice syntax, a worked example |
+| Prompting | The full H3 section architecture, the one-job/one-exclusion rule, timing, a worked example |
+| Free skill | **H3 Prompt Architect** — a downloadable skill that writes H3 prompts for you |
 
 ## Verified rather than repeated
 
@@ -33,6 +34,16 @@ Two claims here come from direct testing, not from a secondary source:
   is defending against.
 - **The audio spec is real.** Every H3 demo file was inspected directly with `ffmpeg`: all are
   24 fps with 32 kHz stereo AAC, at 2560×1440 (16:9), 2944×1248 (21:9) or 1440×2560 (9:16).
+
+## The skill
+
+The guide ships with **H3 Prompt Architect** ([`/skill`](skill/h3-prompt-architect/)) — a skill for
+Claude, Codex, Cursor or any agent that reads project files. Describe a shot in a sentence and it
+returns a structured, paste-ready H3 prompt with every reference assigned, identities locked, beats
+timed and failure modes pre-empted, plus what the generation will cost.
+
+It contains the method, seven blueprints covering every shot type, a symptom-to-fix troubleshooting
+table, and verified specs so it never invents a number. MIT licensed, free to share.
 
 ## Tech
 

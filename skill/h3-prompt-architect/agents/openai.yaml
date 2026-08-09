@@ -1,0 +1,4 @@
+interface:
+  display_name: "H3 Prompt Architect"
+  short_description: "Turn an idea into a paste-ready MiniMax H3 prompt that lands first try"
+  default_prompt: "Use $h3-prompt-architect to turn my brief and references into a MiniMax H3 prompt."
