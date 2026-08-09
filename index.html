@@ -98,7 +98,57 @@ section{position:relative}
   display:flex;align-items:center;gap:14px;margin-bottom:26px;
 }
 .kicker::before{content:"";width:34px;height:1px;background:var(--accent);flex:none}
-html[dir=rtl] .kicker{letter-spacing:.2em}
+/* ============================================================
+   מיקרו-טיפוגרפיה בעברית
+   כל התוויות הקטנות באתר הן מונו + uppercase + letter-spacing רחב.
+   בעברית אין uppercase, המונו מרווח את האותיות לרעה, ו-10px נהיה
+   בלתי קריא. מחליפים לפונט הרגיל, גדול יותר, בלי ריווח.
+   ============================================================ */
+html[dir=rtl] .kicker,
+html[dir=rtl] .hero__scroll,
+html[dir=rtl] .chip,
+html[dir=rtl] .vcard__body b,
+html[dir=rtl] .proof__out .cap,
+html[dir=rtl] .acard b,
+html[dir=rtl] .acard .go,
+html[dir=rtl] .tcard .tag,
+html[dir=rtl] .pcard b,
+html[dir=rtl] .pcard .pu,
+html[dir=rtl] .foot__cols h5,
+html[dir=rtl] .foot__end,
+html[dir=rtl] .code__bar,
+html[dir=rtl] .skillbox__meta,
+html[dir=rtl] .vfull__bar b,
+html[dir=rtl] .sound-note,
+html[dir=rtl] .copy{
+  font-family:'Heebo',sans-serif;
+  letter-spacing:0;
+  text-transform:none;
+}
+html[dir=rtl] .kicker{font-size:13px;font-weight:500}
+html[dir=rtl] .hero__scroll{font-size:12px}
+html[dir=rtl] .chip{font-size:12px}
+html[dir=rtl] .vcard__body b,
+html[dir=rtl] .acard b,
+html[dir=rtl] .tcard .tag,
+html[dir=rtl] .pcard b,
+html[dir=rtl] .foot__cols h5{font-size:12.5px;font-weight:600}
+html[dir=rtl] .proof__out .cap,
+html[dir=rtl] .code__bar,
+html[dir=rtl] .vfull__bar b,
+html[dir=rtl] .sound-note,
+html[dir=rtl] .copy,
+html[dir=rtl] .skillbox__meta,
+html[dir=rtl] .foot__end{font-size:12.5px}
+html[dir=rtl] .acard .go{font-size:13px}
+html[dir=rtl] .pcard .pu{font-size:13px}
+/* מספרים ומזהים טכניים נשארים מונו גם בעברית */
+html[dir=rtl] .mono,
+html[dir=rtl] .tbl .num,
+html[dir=rtl] .blk code,
+html[dir=rtl] .pcard .pv,
+html[dir=rtl] code,
+html[dir=rtl] pre{font-family:'JetBrains Mono',monospace}
 
 h2.sec-title{
   font-size:clamp(38px,7vw,104px);font-weight:900;line-height:.98;
@@ -156,6 +206,13 @@ header{
   letter-spacing:.16em;text-transform:uppercase;color:var(--muted);
   transition:color .3s;white-space:nowrap;
 }
+/* בעברית אין uppercase, ו-11px מונו נראה זעיר — עולים לפונט הרגיל, גדול יותר */
+html[dir=rtl] .hnav a{
+  font-family:'Heebo',sans-serif;font-size:15px;font-weight:500;
+  letter-spacing:0;text-transform:none;
+}
+html[dir=rtl] .lang button{font-size:13px}
+html[dir=rtl] .brand{font-size:14px}
 .hnav a:hover{color:var(--cream)}
 @media(max-width:900px){.hnav .hlink{display:none}}
 
@@ -364,7 +421,7 @@ html[dir=rtl] .hero__badge{left:auto;right:var(--pad)}
   aspect-ratio:16/10;overflow:hidden;background:#000;
   border:1px solid var(--line);will-change:transform;
 }
-.showcase__item img{width:100%;height:100%;object-fit:cover;opacity:.86}
+.showcase__item img{width:100%;height:100%;object-fit:cover;opacity:.9;display:block;background:#000}
 .showcase__cap{
   position:absolute;z-index:6;text-align:center;pointer-events:none;
   padding-inline:var(--pad);
@@ -1003,12 +1060,12 @@ a:focus-visible,button:focus-visible,video:focus-visible,audio:focus-visible,[ta
     <h3 class="blk-title" data-reveal data-en="The rule that matters most" data-he="הכלל הכי חשוב">The rule that matters most</h3>
     <div class="code" data-reveal style="margin-bottom:clamp(24px,3.2vw,38px)">
       <div class="code__bar"><span data-en="Every reference gets one job — and one exclusion" data-he="לכל רפרנס תפקיד אחד — ושורת החרגה אחת">Every reference gets one job — and one exclusion</span></div>
-<pre><span class="k">Image1</span> defines Maya's face, hair and wardrobe <span class="k">only</span>.
+<pre><span class="k">Image 1</span> defines Maya's face, hair and wardrobe <span class="k">only</span>.
 <span class="c">Do not inherit its background, pose, framing or lighting.</span></pre>
     </div>
     <p class="softnote" data-reveal style="margin-top:0;border-top:0;padding-top:0"
-       data-en="That second line is the one almost everyone skips, and it is the line that actually stops the leakage. Token syntax is strict: Image1, Image2, Video1, Audio1 — no @ symbol, no space before the number, numbered in upload order."
-       data-he="השורה השנייה היא זו שכמעט כולם מדלגים עליה, והיא זו שבאמת עוצרת את הדליפה. תחביר הטוקנים נוקשה: Image1, Image2, Video1, Audio1 — בלי @, בלי רווח לפני המספר, ממוספר לפי סדר ההעלאה.">That second line is what actually stops the leakage.</p>
+       data-en="That second line is the one almost everyone skips, and it is the line that actually stops the leakage. On tokens: MiniMax's own examples number them in attachment order across all types — a video attached first, an image second and audio third become Video 1, Image 2, Audio 3. What matters is that the number matches the position your interface shows. Never use an @ prefix."
+       data-he="השורה השנייה היא זו שכמעט כולם מדלגים עליה, והיא זו שבאמת עוצרת את הדליפה. לגבי טוקנים: הדוגמאות של MiniMax עצמה ממספרות לפי סדר הצירוף על פני כל הסוגים — וידאו שצורף ראשון, תמונה שנייה ואודיו שלישי הופכים ל-Video 1, Image 2, Audio 3. מה שחשוב הוא שהמספר יתאים למיקום שהממשק מציג לך. לעולם אל תשתמש בקידומת @.">That second line is what actually stops the leakage.</p>
 
     <h3 class="blk-title" data-reveal data-en="Timing the beats" data-he="תזמון הביטים">Timing the beats</h3>
     <div class="formula">
@@ -1085,9 +1142,6 @@ End on a stable close view of her face and the cup.
         <a class="btn" href="skill/h3-prompt-architect.zip" download>
           <span data-en="Download the skill" data-he="הורד את הסקיל">Download the skill</span><em>↓</em>
         </a>
-        <a class="btn btn--ghost" href="skill/h3-prompt-architect/README.md">
-          <span data-en="Install guide" data-he="מדריך התקנה">Install guide</span><em>→</em>
-        </a>
         <span class="skillbox__meta" data-en="23 KB · free · MIT · works in Claude, Codex, Cursor" data-he="23 KB · חינם · MIT · עובד ב-Claude, Codex, Cursor">23 KB · free · MIT · works in Claude, Codex, Cursor</span>
       </div>
     </div>
@@ -1114,11 +1168,11 @@ End on a stable close view of her face and the cup.
         <p data-en="Model ID MiniMax-H3, billed per second at the direct rate. This is the route if you are generating a lot and want the $0.13 price." data-he="מזהה מודל MiniMax-H3, חיוב לפי שנייה בתעריף הישיר. זו הדרך אם מייצרים הרבה ורוצים את המחיר של 0.13$.">Model ID MiniMax-H3, billed per second at the direct rate.</p>
         <span class="go"><span>platform.minimax.io</span><em>→</em></span>
       </a>
-      <a class="acard" data-reveal href="https://fal.ai/minimax-h3" target="_blank" rel="noopener noreferrer">
-        <b data-en="For developers" data-he="למפתחים">For developers</b>
-        <h4>fal.ai</h4>
-        <p data-en="Three ready endpoints — text-to-video, image-to-video and reference-to-video — at the same published rates, with nothing to provision." data-he="שלושה endpoints מוכנים — טקסט-לווידאו, תמונה-לווידאו ורפרנס-לווידאו — באותם תעריפים, בלי להקים כלום.">Three ready endpoints at the same published rates.</p>
-        <span class="go"><span>fal.ai/minimax-h3</span><em>→</em></span>
+      <a class="acard" data-reveal href="https://higgsfield.ai" target="_blank" rel="noopener noreferrer">
+        <b data-en="Inside a creative suite" data-he="בתוך חבילת יצירה">Inside a creative suite</b>
+        <h4 data-en="Higgsfield · Krea · fal" data-he="Higgsfield · Krea · fal">Higgsfield · Krea · fal</h4>
+        <p data-en="H3 also shows up as a model option inside the AI platforms you may already pay for. Handy if you want it next to your other models — just check the per-second rate, since some resell above the direct price." data-he="H3 מופיע גם כאפשרות מודל בתוך פלטפורמות ה-AI שאתה אולי כבר משלם עליהן. נוח אם אתה רוצה אותו לצד שאר המודלים שלך — רק בדוק את המחיר לשנייה, כי חלק מוכרים מעל התעריף הישיר.">H3 also appears as a model option inside AI platforms you may already pay for.</p>
+        <span class="go"><span data-en="higgsfield.ai · krea.ai · fal.ai" data-he="higgsfield.ai · krea.ai · fal.ai">higgsfield.ai · krea.ai · fal.ai</span><em>→</em></span>
       </a>
     </div>
   </div>
