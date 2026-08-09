@@ -61,16 +61,13 @@
    ============================================================ */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#08080a;
-  --bg-2:#0e0e12;
-  --cream:#f2efe9;
-  --muted:#8b8b95;
-  --line:rgba(242,239,233,.13);
-  --accent:#ff4326;
-  --accent-soft:rgba(255,67,38,.14);
-  --ok:#3ddc91;
-  --warn:#ffc24d;
-  --bad:#ff5470;
+  --bg:#0a0a0a;
+  --bg-2:#151515;
+  --cream:#f4f4ef;
+  --muted:#9b9b93;
+  --line:rgba(255,255,255,.14);
+  --accent:#ffd400;
+  --accent-soft:rgba(255,212,0,.16);
   --pad:clamp(20px,5vw,80px);
   --maxw:1360px;
 }
@@ -88,7 +85,7 @@ body{
 body.loading{overflow:hidden}
 img,video{display:block;max-width:100%}
 a{color:inherit;text-decoration:none}
-::selection{background:var(--accent);color:#fff}
+::selection{background:var(--accent);color:#0a0a0a}
 
 .mono{font-family:'JetBrains Mono',ui-monospace,monospace;font-variant-ligatures:none}
 .wrap{width:100%;max-width:var(--maxw);margin-inline:auto;padding-inline:var(--pad)}
@@ -145,7 +142,7 @@ header{
   position:fixed;top:0;left:0;right:0;z-index:120;
   display:flex;align-items:center;justify-content:space-between;
   gap:16px;padding:16px var(--pad);
-  background:linear-gradient(to bottom,rgba(8,8,10,.92),rgba(8,8,10,0));
+  background:linear-gradient(to bottom,rgba(10,10,10,.92),rgba(10,10,10,0));
   backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px);
 }
 .brand{
@@ -172,7 +169,7 @@ header{
   letter-spacing:.1em;padding:7px 15px;background:none;border:0;
   color:var(--muted);cursor:pointer;transition:.3s;line-height:1;
 }
-.lang button[aria-pressed=true]{background:var(--accent);color:#fff}
+.lang button[aria-pressed=true]{background:var(--accent);color:#0a0a0a}
 .lang button:hover:not([aria-pressed=true]){color:var(--cream)}
 
 /* ============================================================
@@ -192,8 +189,8 @@ header{
   content:"";position:absolute;inset:0;z-index:3;pointer-events:none;
   opacity:calc(1 - var(--progress) * .72);
   background:
-    radial-gradient(ellipse 62% 44% at 50% 50%,rgba(8,8,10,.86) 0%,rgba(8,8,10,.45) 55%,transparent 78%),
-    linear-gradient(to bottom,rgba(8,8,10,.78) 0%,transparent 26%,transparent 62%,rgba(8,8,10,.86) 100%);
+    radial-gradient(ellipse 62% 44% at 50% 50%,rgba(10,10,10,.86) 0%,rgba(10,10,10,.45) 55%,transparent 78%),
+    linear-gradient(to bottom,rgba(10,10,10,.78) 0%,transparent 26%,transparent 62%,rgba(10,10,10,.86) 100%);
 }
 /* המדיה המתרחבת */
 .hero__media{
@@ -219,54 +216,13 @@ header{
 .hero__media__front.f5{transform:scale(.3)}
 .hero__media__front.f6{transform:scale(.15)}
 
-/* אריחים טסים */
-.hero__tiles{
-  position:absolute;inset:0;z-index:2;
-  perspective:100vh;pointer-events:none;
-}
-/* אריחים בגודל אחיד — aspect-ratio קבוע כדי שפוסטרים אנכיים
-   לא ימתחו לפסים גבוהים (באג שנתפס באימות בדפדפן) */
-.hero__tiles img{
-  position:absolute;width:10.5vw;aspect-ratio:16/10;
-  object-fit:cover;border-radius:3px;
-  box-shadow:0 18px 48px rgba(0,0,0,.65);
-  backface-visibility:hidden;filter:brightness(.82);
-}
-/* מיקומים מתוכננים סביב שלושה אזורים נקיים:
-   קיקר (12–20vh משמאל) · כותרת (35–58vh במרכז) · תת-כותרת (78–96vh משמאל) */
-.hero__tiles img:nth-of-type(1){top:26vh;left:1vw}
-.hero__tiles img:nth-of-type(2){top:2vh;left:17vw}
-.hero__tiles img:nth-of-type(3){top:3vh;left:34vw}
-.hero__tiles img:nth-of-type(4){top:5vh;right:26vw}
-.hero__tiles img:nth-of-type(5){top:14vh;right:7vw}
-.hero__tiles img:nth-of-type(6){top:33vh;right:1vw}
-.hero__tiles img:nth-of-type(7){top:63vh;left:2vw}
-.hero__tiles img:nth-of-type(8){bottom:5vh;left:52vw}
-.hero__tiles img:nth-of-type(9){bottom:9vh;right:20vw}
-.hero__tiles img:nth-of-type(10){bottom:16vh;right:4vw}
-/* במובייל האזורים הנקיים צרים בהרבה — משאירים 6 אריחים בלבד,
-   כולם מחוץ לפס הקיקר (6–15vh), לפס הכותרת (40–58vh) ולתת-הכותרת (80vh+) */
-@media(max-width:768px){
-  .hero__tiles img{width:27vw}
-  .hero__tiles img:nth-of-type(3),
-  .hero__tiles img:nth-of-type(6),
-  .hero__tiles img:nth-of-type(8),
-  .hero__tiles img:nth-of-type(10){display:none}
-  .hero__tiles img:nth-of-type(1){top:17vh;left:1vw;right:auto;bottom:auto}
-  .hero__tiles img:nth-of-type(2){top:16vh;left:auto;right:2vw;bottom:auto}
-  .hero__tiles img:nth-of-type(4){top:28.5vh;left:4vw;right:auto;bottom:auto}
-  .hero__tiles img:nth-of-type(5){top:27.5vh;left:auto;right:3vw;bottom:auto}
-  .hero__tiles img:nth-of-type(7){top:60vh;left:2vw;right:auto;bottom:auto}
-  .hero__tiles img:nth-of-type(9){top:62vh;left:auto;right:3vw;bottom:auto}
-}
-
 /* כותרת הירו — נשארת LTR תמיד (שם מותג) */
 .hero__title{
   position:relative;z-index:4;display:flex;justify-content:center;
   gap:.14em;
   font-size:clamp(44px,11vw,168px);font-weight:900;letter-spacing:-.04em;
   line-height:1;transform:translateY(-10%);pointer-events:none;
-  text-shadow:0 6px 26px rgba(8,8,10,.92),0 14px 70px rgba(8,8,10,.75);
+  text-shadow:0 6px 26px rgba(10,10,10,.92),0 14px 70px rgba(10,10,10,.75);
 }
 .hero__title span{display:inline-block}
 .hero__title b{display:inline-block;font-weight:inherit;font-style:normal}
@@ -285,11 +241,11 @@ header{
 }
 .hero__sub{
   max-width:44ch;font-size:clamp(14px,1.45vw,18px);color:#c9c9d2;font-weight:300;
-  text-shadow:0 2px 14px rgba(8,8,10,.95),0 0 34px rgba(8,8,10,.85);
+  text-shadow:0 2px 14px rgba(10,10,10,.95),0 0 34px rgba(10,10,10,.85);
 }
 html[dir=rtl] .hero__sub{font-weight:400}
 /* הכותרות הקטנות בהירו יושבות מעל אריחים — צריך צל כדי להישאר קריאות */
-.hero__badge .kicker,.hero__scroll{text-shadow:0 2px 12px rgba(8,8,10,.98),0 0 26px rgba(8,8,10,.9)}
+.hero__badge .kicker,.hero__scroll{text-shadow:0 2px 12px rgba(10,10,10,.98),0 0 26px rgba(10,10,10,.9)}
 .hero__scroll{
   font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.3em;
   text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:10px;
@@ -301,27 +257,6 @@ html[dir=rtl] .hero__sub{font-weight:400}
   position:absolute;top:calc(var(--pad) + 42px);left:var(--pad);z-index:5;
 }
 html[dir=rtl] .hero__badge{left:auto;right:var(--pad)}
-
-/* ============================================================
-   5. רצועת מספרים
-   ============================================================ */
-.stats{border-block:1px solid var(--line);background:var(--bg-2)}
-.stats__grid{
-  display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
-}
-.stat{padding:clamp(28px,4vw,54px) clamp(16px,2.4vw,34px);border-inline-start:1px solid var(--line)}
-.stat:first-child{border-inline-start:0}
-.stat b{
-  display:block;font-family:'JetBrains Mono',monospace;font-weight:700;
-  font-size:clamp(26px,3.5vw,48px);letter-spacing:-.03em;line-height:1;
-  margin-bottom:10px;
-}
-.stat span{font-size:12px;color:var(--muted);letter-spacing:.04em;display:block;line-height:1.45}
-@media(max-width:640px){
-  .stats__grid{grid-template-columns:1fr 1fr}
-  .stat:nth-child(odd){border-inline-start:0}
-  .stat{border-top:1px solid var(--line)}
-}
 
 /* ============================================================
    6. סקשן כללי
@@ -348,7 +283,7 @@ html[dir=rtl] .hero__badge{left:auto;right:var(--pad)}
   display:grid;grid-template-columns:104px 1fr;align-items:center;gap:16px;
   transition:border-color .4s;
 }
-.pin-card:hover{border-color:rgba(255,67,38,.5)}
+.pin-card:hover{border-color:rgba(255,212,0,.55)}
 .pin-card .pv{width:104px;height:72px;object-fit:cover;background:#000}
 .pin-card .pt{padding-inline-end:16px}
 .pin-card .pt b{
@@ -378,7 +313,7 @@ html[dir=rtl] .hero__badge{left:auto;right:var(--pad)}
 /* רשת היכולות הקריאה */
 .caps{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,270px),1fr));gap:clamp(14px,1.9vw,24px)}
 .cap{border:1px solid var(--line);background:var(--bg-2);padding:clamp(20px,2.5vw,28px);transition:border-color .4s}
-.cap:hover{border-color:rgba(255,67,38,.45)}
+.cap:hover{border-color:rgba(255,212,0,.5)}
 .cap b{
   display:block;font-family:'JetBrains Mono',monospace;font-size:10px;
   letter-spacing:.2em;color:var(--accent);margin-bottom:12px;text-transform:uppercase;
@@ -400,7 +335,7 @@ html[dir=rtl] .hero__badge{left:auto;right:var(--pad)}
 }
 .tbl td:first-child{color:var(--cream);font-weight:500}
 .tbl td{color:var(--muted)}
-.tbl tr:hover td{background:rgba(242,239,233,.028)}
+.tbl tr:hover td{background:rgba(255,255,255,.03)}
 .tbl .num{font-family:'JetBrains Mono',monospace;color:var(--cream)}
 .tscroll{overflow-x:auto;border:1px solid var(--line);background:var(--bg-2)}
 .tscroll .tbl tr:last-child td{border-bottom:0}
@@ -418,7 +353,7 @@ html[dir=rtl] .hero__badge{left:auto;right:var(--pad)}
 /* וילון קריאות לכיתוב שיושב מעל הרשת המוגדלת */
 .showcase__pin::after{
   content:"";position:absolute;inset:0;z-index:5;pointer-events:none;
-  background:radial-gradient(ellipse 72% 48% at 50% 50%,rgba(8,8,10,.88) 0%,rgba(8,8,10,.4) 60%,transparent 84%);
+  background:radial-gradient(ellipse 72% 48% at 50% 50%,rgba(10,10,10,.88) 0%,rgba(10,10,10,.4) 60%,transparent 84%);
 }
 .showcase__grid{
   display:grid;grid-template-columns:repeat(3,1fr);
@@ -436,7 +371,7 @@ html[dir=rtl] .hero__badge{left:auto;right:var(--pad)}
 }
 .showcase__cap h2{
   font-size:clamp(34px,7.5vw,110px);font-weight:900;line-height:.96;letter-spacing:-.03em;
-  text-shadow:0 8px 50px rgba(8,8,10,.9);
+  text-shadow:0 8px 50px rgba(10,10,10,.9);
 }
 .showcase__cap p{
   color:var(--muted);margin-top:14px;font-size:clamp(14px,1.5vw,18px);
@@ -495,7 +430,7 @@ html[dir=rtl] .hero__badge{left:auto;right:var(--pad)}
    ============================================================ */
 .price{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:clamp(14px,1.8vw,22px);margin-bottom:clamp(26px,3.4vw,44px)}
 .pcard{border:1px solid var(--line);background:var(--bg-2);padding:clamp(20px,2.6vw,32px);position:relative;overflow:hidden}
-.pcard.hot{border-color:rgba(255,67,38,.55)}
+.pcard.hot{border-color:rgba(255,212,0,.6)}
 .pcard.hot::after{
   content:"";position:absolute;inset-inline-start:0;top:0;width:2px;height:100%;background:var(--accent);
 }
@@ -513,17 +448,13 @@ html[dir=rtl] .hero__badge{left:auto;right:var(--pad)}
 .tcard{border:1px solid var(--line);background:var(--bg-2);padding:clamp(20px,2.6vw,30px)}
 .tcard header{position:static;background:none;backdrop-filter:none;padding:0;display:flex;align-items:center;gap:10px;margin-bottom:14px}
 .tcard .dot{width:8px;height:8px;border-radius:50%;flex:none}
-.tcard.ok .dot{background:var(--ok)}
-.tcard.warn .dot{background:var(--warn)}
-.tcard.bad .dot{background:var(--bad)}
+.tcard .dot{background:var(--accent)}
 .tcard .tag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase}
-.tcard.ok .tag{color:var(--ok)}
-.tcard.warn .tag{color:var(--warn)}
-.tcard.bad .tag{color:var(--bad)}
+.tcard .tag{color:var(--accent)}
 .tcard h4{font-size:17px;font-weight:700;margin-bottom:9px;line-height:1.3}
 .tcard p{font-size:14px;color:var(--muted);line-height:1.65}
 .tcard code{
-  font-family:'JetBrains Mono',monospace;font-size:12px;background:rgba(242,239,233,.06);
+  font-family:'JetBrains Mono',monospace;font-size:12px;background:rgba(255,255,255,.07);
   padding:2px 6px;color:var(--cream);
 }
 /* ===== קופסת הסקיל ===== */
@@ -556,7 +487,7 @@ html[dir=rtl] .hero__badge{left:auto;right:var(--pad)}
 }
 .btn{
   display:inline-flex;align-items:center;gap:12px;
-  background:var(--accent);color:#fff;padding:14px 26px;
+  background:var(--accent);color:#0a0a0a;padding:14px 26px;
   font-weight:700;font-size:14.5px;letter-spacing:.01em;
   transition:transform .3s,filter .3s;
 }
@@ -602,7 +533,7 @@ html[dir=rtl] .hero__badge{left:auto;right:var(--pad)}
 .fstep b{font-family:'JetBrains Mono',monospace;font-size:26px;font-weight:700;color:var(--accent-soft);line-height:1;display:block;margin-bottom:9px;-webkit-text-stroke:1px var(--accent);color:transparent}
 .fstep span{font-size:13px;line-height:1.45;display:block}
 .code{
-  border:1px solid var(--line);background:#0b0b0f;overflow:hidden;
+  border:1px solid var(--line);background:#0e0e0e;overflow:hidden;
 }
 .code__bar{
   display:flex;justify-content:space-between;align-items:center;gap:12px;
@@ -633,7 +564,7 @@ html[dir=rtl] .hero__badge{left:auto;right:var(--pad)}
   border:1px solid var(--line);background:var(--bg-2);padding:clamp(20px,2.6vw,30px);
   display:flex;flex-direction:column;gap:11px;transition:border-color .4s,transform .5s;
 }
-.acard:hover{border-color:rgba(255,67,38,.5);transform:translateY(-4px)}
+.acard:hover{border-color:rgba(255,212,0,.55);transform:translateY(-4px)}
 .acard b{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;color:var(--accent);text-transform:uppercase}
 .acard h4{font-size:18px;font-weight:700}
 .acard p{font-size:13.5px;color:var(--muted);line-height:1.6;flex:1}
@@ -681,7 +612,7 @@ footer{border-top:1px solid var(--line);padding:clamp(56px,8vw,100px) 0 clamp(30
 /* קפיצה לתוכן — מופיע רק בטאב, הדבר הראשון שגולש מקלדת פוגש */
 .skip{
   position:absolute;inset-inline-start:-9999px;top:0;z-index:999;
-  background:var(--accent);color:#fff;padding:12px 20px;
+  background:var(--accent);color:#0a0a0a;padding:12px 20px;
   font-weight:700;font-size:14px;
 }
 .skip:focus{inset-inline-start:0}
@@ -696,7 +627,7 @@ a:focus-visible,button:focus-visible,video:focus-visible,audio:focus-visible,[ta
 }
 /* מצב ניגודיות גבוהה */
 @media(prefers-contrast:more){
-  :root{--muted:#c4c4cc;--line:rgba(242,239,233,.35)}
+  :root{--muted:#c9c9c2;--line:rgba(255,255,255,.36)}
 }
 </style>
 </head>
@@ -750,20 +681,6 @@ a:focus-visible,button:focus-visible,video:focus-visible,audio:focus-visible,[ta
     <div aria-hidden="true" class="hero__media__front f6"><img src="assets/poster/03-2k-performance.jpg" loading="lazy" alt=""></div>
   </div>
 
-  <!-- אריחים טסים לעבר המצלמה -->
-  <div class="hero__tiles" aria-hidden="true">
-    <img src="assets/poster/05-film-opening-titles.jpg" loading="lazy" alt="">
-    <img src="assets/poster/08-advertising-ecommerce.jpg" loading="lazy" alt="">
-    <img src="assets/poster/02-multimodal-context-result.jpg" loading="lazy" alt="">
-    <img src="assets/poster/06-product-website.jpg" loading="lazy" alt="">
-    <img src="assets/poster/04-native-stereo-sound.jpg" loading="lazy" alt="">
-    <img src="assets/poster/07-animated-poster.jpg" loading="lazy" alt="">
-    <img src="assets/poster/01-input-reference-video.jpg" loading="lazy" alt="">
-    <img src="assets/poster/03-2k-performance.jpg" loading="lazy" alt="">
-    <img src="assets/poster/05-film-opening-titles.jpg" loading="lazy" alt="">
-    <img src="assets/poster/06-product-website.jpg" loading="lazy" alt="">
-  </div>
-
   <div class="hero__badge">
     <div class="kicker" data-en="Released July 31, 2026 · Open weights Aug 3" data-he="שוחרר 31.07.2026 · משקלים פתוחים 03.08">Released July 31, 2026 · Open weights Aug 3</div>
   </div>
@@ -779,18 +696,6 @@ a:focus-visible,button:focus-visible,video:focus-visible,audio:focus-visible,[ta
        data-en="A 33B omni-modal model that generates 15 seconds of native 2K video with stereo audio in a single pass — for $0.13 a second."
        data-he="מודל אומני-מודאלי של 33 מיליארד פרמטרים שמייצר 15 שניות של וידאו 2K עם סאונד סטריאו בפעולה אחת — ב-0.13 דולר לשנייה.">A 33B omni-modal model that generates 15 seconds of native 2K video with stereo audio in a single pass — for $0.13 a second.</p>
     <div class="hero__scroll"><i></i><span data-en="Scroll" data-he="גלול">Scroll</span></div>
-  </div>
-</section>
-
-<!-- ========== רצועת מספרים ========== -->
-<section class="stats">
-  <div class="stats__grid">
-    <div class="stat"><b class="mono"><span data-count="0.13" data-dec="2" data-pre="$">$0.13</span></b><span data-en="per second at 2K" data-he="לשנייה ב-2K">per second at 2K</span></div>
-    <div class="stat"><b class="mono">2560<span style="opacity:.4">×</span>1440</b><span data-en="verified native 2K" data-he="2K נייטיב מאומת">verified native 2K</span></div>
-    <div class="stat"><b class="mono"><span data-count="15">15</span>s</b><span data-en="max duration, 24 fps" data-he="אורך מרבי, 24 פריימים">max duration, 24 fps</span></div>
-    <div class="stat"><b class="mono"><span data-count="33">33</span>B</b><span data-en="open-weight parameters" data-he="פרמטרים במשקלים פתוחים">open-weight parameters</span></div>
-    <div class="stat"><b class="mono">#<span data-count="1">1</span></b><span data-en="video editing, Artificial Analysis" data-he="עריכת וידאו, Artificial Analysis">video editing, Artificial Analysis</span></div>
-    <div class="stat"><b class="mono">32<span style="font-size:.55em"> kHz</span></b><span data-en="native stereo, 11 languages" data-he="סטריאו מובנה, 11 שפות">native stereo, 11 languages</span></div>
   </div>
 </section>
 
@@ -1348,11 +1253,6 @@ function revealAll(){
   document.querySelectorAll('[data-reveal],[data-fade]').forEach(el => {
     el.style.opacity = '1'; el.style.transform = 'none';
   });
-  document.querySelectorAll('[data-bar]').forEach(el => { el.style.width = el.dataset.bar + '%'; });
-  document.querySelectorAll('[data-count]').forEach(el => {
-    const dec = parseInt(el.dataset.dec || '0', 10);
-    el.textContent = (el.dataset.pre || '') + parseFloat(el.dataset.count).toFixed(dec);
-  });
 }
 function failSafe(){ dropPreloader(); revealAll(); }
 
@@ -1389,10 +1289,7 @@ function bootPreloader(){
    ============================================================ */
 function initHero(){
   const hero  = document.querySelector('.hero');
-  const tiles = hero.querySelectorAll('.hero__tiles img');
   const fronts= hero.querySelectorAll('.hero__media__front');
-
-  gsap.set(tiles, { transformStyle:'preserve-3d', backfaceVisibility:'hidden', force3D:true });
 
   const tl = gsap.timeline({
     scrollTrigger:{
@@ -1410,9 +1307,7 @@ function initHero(){
     }
   });
 
-  tl.to(tiles, { z:'100vh', duration:1, ease:'power1.inOut',
-                 stagger:{ amount:.2, from:'center' } })
-    .to(fronts, { scale:1, duration:1, ease:'power1.inOut', delay:.1 }, .6)
+  tl.to(fronts, { scale:1, duration:1, ease:'power1.inOut', delay:.1 }, .6)
     .to(fronts, { filter:'blur(0px)', duration:1, ease:'power1.inOut', delay:.4,
                   stagger:{ amount:.2, from:'end' } }, .6);
 
@@ -1495,26 +1390,6 @@ function initReveals(){
     });
   });
 
-  /* מונים */
-  gsap.utils.toArray('[data-count]').forEach(el => {
-    const end = parseFloat(el.dataset.count);
-    const dec = parseInt(el.dataset.dec || '0', 10);
-    const pre = el.dataset.pre || '';
-    const o = { v:0 };
-    gsap.to(o, {
-      v:end, duration:1.5, ease:'power2.out',
-      scrollTrigger:{ trigger:el, start:'top 92%' },
-      onUpdate(){ el.textContent = pre + o.v.toFixed(dec); }
-    });
-  });
-
-  /* עמודות בנצ'מרק */
-  gsap.utils.toArray('[data-bar]').forEach(el => {
-    gsap.to(el, {
-      width: el.dataset.bar + '%', duration:1.3, ease:'power3.out',
-      scrollTrigger:{ trigger:el, start:'top 92%' }
-    });
-  });
 }
 
 /* ============================================================
